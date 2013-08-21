@@ -8,9 +8,7 @@
 key=$1
 groupName=$2
 token=$3
-iterationInSec=$(( iteration*3600 ))
-runSecDelay=$(( runSec+5 ))
-runTime=$(( $iterationInSec/$runSecDelay )) 
+
 
 
 #check if all parameters are provided for test
@@ -28,8 +26,8 @@ else
 
 #run the generator utility which actually sends the messages.
 #loads the external jars from "ext-lib" , utility jars from "lib" & configuration parameter from .tmpl file inside  "config" dir 
-	echo "Sending messages.. ..runfor[$runTime times] "
-   java -d64 -Xms4048M -Xmx14048M  -cp   "../../ext-lib/*":"../../ext-lib/rti/*":"../../export/data-files/*":"../../lib/*":"../../config/":"../../export/" com.persistent.bcsuite.process.Generator $key $groupName $token $runTime >> logs/run-publisher-reliability-test.log 
+	echo "Sending messages.. ..runfor[$iteration times] "
+   java -d64 -Xms4048M -Xmx14048M  -cp   "../../ext-lib/*":"../../ext-lib/rti/*":"../../export/data-files/*":"../../lib/*":"../../config/":"../../export/" com.persistent.bcsuite.process.Generator $key $groupName $token $iteration >> logs/run-publisher-reliability-test.log 
 
 
 fi

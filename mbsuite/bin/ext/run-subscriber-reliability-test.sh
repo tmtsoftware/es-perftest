@@ -8,9 +8,6 @@ key=$1
 groupName=$2
 token=$3
 
-iterationInSec=$(( iteration*3600 ))
-
-runTime=$(( $iterationInSec/$shutdownDelay )) 
 
 #check if all parameters are provided for test
 if [[ $1 = "" || $2 = "" || $3 = ""  ]]; then
@@ -26,8 +23,8 @@ else
  
 #run the extractor utility which actually receives the messages.
 #loads the external jars from "ext-lib" , utility jars from "lib" & configuration parameter from .tmpl file inside  "config" dir 
-  echo "Receiving messages..runfor[$runTime times] " 
-   java -d64 -Xms4048M -Xmx14048M  -cp   "../../ext-lib/*":"../../ext-lib/rti/*":"../../export/data-files/":"../../lib/mbsuite-addons.jar":"../../config/":"../../lib/mbsuite-subscriber-base.jar":"../../export/"   com.persistent.bcsuite.process.Extractor $key $groupName $token $runTime >> logs/run-subscriber-reliability-test.log  
+  echo "Receiving messages..runfor[$iteration times] " 
+   java -d64 -Xms4048M -Xmx14048M  -cp   "../../ext-lib/*":"../../ext-lib/rti/*":"../../export/data-files/":"../../lib/mbsuite-addons.jar":"../../config/":"../../lib/mbsuite-subscriber-base.jar":"../../export/"   com.persistent.bcsuite.process.Extractor $key $groupName $token $iteration >> logs/run-subscriber-reliability-test.log  
  
 
 fi
