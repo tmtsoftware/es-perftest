@@ -15,5 +15,7 @@ Instructions--
 
 5) create table scripts are available in "es-perftest-master/setup-info/create-table-queries.txt"
 
+6) Prerequisite for running the the test are available in "es-perftest-master/setup-info/prerequisite.txt"
+
 6) Go to "cd es-perftest-master/" and type  "chmod 777 mbsuite/ -R " it will give Read-Write-Execute permission to "mbsuite" dir.
 
