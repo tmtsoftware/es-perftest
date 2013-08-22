@@ -1,0 +1,6 @@
+log4j.logger.com.persistent.bcsuite.charts=INFO, charts
+log4j.appender.charts=org.apache.log4j.ConsoleAppender
+log4j.appender.charts.layout=org.apache.log4j.PatternLayout
+
+# Print the date in ISO 8601 format
+log4j.appender.charts.layout.ConversionPattern=%m%n
