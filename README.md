@@ -5,7 +5,7 @@ Event Services Performance Tests and Prototyping
 
 Instructions-- 
 
-	* Download ant extract "mbsuite-packager.zip" 
+	* Download and extract "mbsuite-packager.zip" 
 	
 	* Go to "constants.properties" by typing "cd mbsuite-packager/config/" and enter the Git-url with username & password.The "checkouot_dir" is the path where your "mbsuite-packager" dir is present & test_dir is the path where you want to store  "mbsuite" dir.
 	
