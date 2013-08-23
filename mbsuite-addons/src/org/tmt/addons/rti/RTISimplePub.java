@@ -26,7 +26,7 @@ import com.rti.dds.topic.TopicQos;
 
 public class RTISimplePub extends PublisherBase {
 
-	public static Logger logger = Logger.getLogger(RTIPublisher.class);
+	public static Logger logger = Logger.getLogger(RTISimplePub.class);
 	private static DomainParticipantFactory factory;
 	private static DomainParticipant participant;
 	private Publisher publisher;

@@ -3,30 +3,29 @@ es-perftest
 
 Event Services Performance Tests and Prototyping
 
-Instructions-- 
+Instructions to Build from source on GitHub-- 
 
 	* Extract "mbsuite-packager.zip" it creates "mbsuite-packager" dir.
 	
-	* Go to "constants.properties" by typing "cd mbsuite-packager/config/" and enter the Git-url with username & password.The "checkouot_dir" is the path where your "mbsuite-packager" dir is present & test_dir is the path where you want to store  "mbsuite" dir.
+	* Type "vi mbsuite-packager/config/parameter.properties" and enter the GitHub-url with username,password,checkout_dir,test_dir.
+	  checkout_dir - is where you want the source code to be checked out
+	  test_dir is  - where you will run the tests from. We recommend having a separate folder for running tests.
+	 	
+	* Go to "cd mbsuite-packager/bin/" & perform following steps-
+			
+			--> If you have "mbsuite-packager.zip" & you want to checkout code from GitHub & then build the code then  run " ./checkout-build.sh "
+
+			--> If you have already cloned from GitHub using some external method or you downloaded the GitHub repository as a zip (es-perftest-master.zip) & you want to only build the source code without checking out then 
+				 run  " ./build.sh " 	
+			
+	* Ensure that during the build there no errors. After the build complete a "mbsuite" directory gets created under the path specified for parameter "test_dir" . From hereon this mbsuite dir is 
+	  the base dir for benchmarking framework and scripts.
 	
-	* Go to "mbsuite-packager/bin/" & perform following steps-
-	
-		--> Type "chmod 777 *.sh" for Read-Write-Execute permission to scripts.
+	* Prerequisite for running the test are available in "setup-info/prerequisite.txt" on GitHub repository & these utilities are mandatory.
 		
-		--> Type "dos2unix *.sh " or type "sed -i -e 's/\r$//' *.*" for converting files to bash compatible mode.
+	* Before you start executing the tests , create db-tables using the create table scripts that are available in "setup-info/create-table-queries.txt".
 		
-		--> For github checkout type "./build-git.sh" it will checkout the code from Git & build it.
-		
-		--> For svn checkout type "./build.sh" it will checkout the code from svn & build it.
-		
-		
-	* The "mbsuite" test dir  is available in "test_dir" path in "constants.properties" file 
-	
-	* Prerequisite for running the the test are available in "setup-info/prerequisite.txt" & these utilities are mandatory.
-		
-	* Before running the test first create db-tables using the create table scripts that are available in "setup-info/create-table-queries.txt".
-		
-	* After creation of db-tables go to "mbsuite/config/common-settings.properties" and enter db-url and other parameters. 
+	* After creation of db-tables go to "<"test_dir" path>/mbsuite/config/common-settings.properties" and enter db-url and other parameters. 
 
 	* Go to <"test_dir" path>/mbsuite 
 	
@@ -77,9 +76,6 @@ Instructions--
 	
 	* All test data is dumped to respective files in "mbsuite/export/data-files" dir.
 	
-	* The exported .jpeg format output of sar & ksar test is available in "mbsuite/data-files/ksar/publisher/images"  & "mbsuite/data-files/ksar/subscriber/images"
-	
 	* The "mbsuite/ext-lib" dir contains external jars which are required to run the messaging API specific test.
-	
 	
 
