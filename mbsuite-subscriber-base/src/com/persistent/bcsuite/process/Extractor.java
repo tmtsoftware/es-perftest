@@ -27,14 +27,19 @@ import org.apache.log4j.Logger;
 import com.persistent.bcsuite.base.SubscriberBase;
 import com.persistent.bcsuite.beans.SubscriberGroup;
 import com.persistent.bcsuite.beans.SubscriberSettings;
-import com.persistent.bcsuite.support.SubscriberDetail;
 import com.persistent.bcsuite.support.Validator;
 
+/**
+ * This is part of the benchmarking framework. This class creates instances of subscriber programs and executes each
+ * instance in its own thread. The subscriber programs should extend SubscriberBase class in order to be invoked by this
+ * framework.
+ * 
+ * 
+ * 
+ */
 public class Extractor {
    private final static Logger logger = Logger.getLogger(Extractor.class);
-
    // Initialize once per every run of process
-
    SubscriberGroup sg = null;
    List<SubscriberBase> tasksList = new ArrayList<SubscriberBase>();
    double totalMessagesRecd = 0d;
@@ -55,15 +60,8 @@ public class Extractor {
    SubscriberSettings subscriberSettings;
    private boolean possibleHangingSubscribers = false;
    private int runCounter = 0;
-   private String dbUrl=null;
-   private static String dumpDestination; 
-
-   private void generateInstanceToken() {
-      if (instanceToken == null)
-         instanceToken = UUID.randomUUID().toString();
-
-      logger.info("Using Token [" + instanceToken + "]");
-   }
+   private String dbUrl = null;
+   private static String dumpDestination;
 
    public boolean isPossibleHangingSubscribers() {
       return possibleHangingSubscribers;
@@ -109,27 +107,23 @@ public class Extractor {
          Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
          subscriberSettings = (SubscriberSettings) jaxbUnmarshaller.unmarshal(is);
          logger.info("Sucessfully loaded subscriber configuration");
-         generateInstanceToken();
-		 
-		 InputStream commonSettingsInputStream = this.getClass().getClassLoader().getResourceAsStream("common-settings.properties");
-		 Properties commonSettings = new Properties();
-		 commonSettings.load(commonSettingsInputStream);
-		 dbUrl = commonSettings.getProperty("db-url");
-		 dumpDestination = commonSettings.getProperty("dump-destination");
-		 logger.info("Sucessfully Loaded common-settings properties");
-		 
+
+         InputStream commonSettingsInputStream = this.getClass().getClassLoader()
+                  .getResourceAsStream("common-settings.properties");
+         Properties commonSettings = new Properties();
+         commonSettings.load(commonSettingsInputStream);
+         dbUrl = commonSettings.getProperty("db-url");
+         dumpDestination = commonSettings.getProperty("dump-destination");
+         logger.info("Sucessfully Loaded common-settings properties");
+
       } catch (JAXBException e) {
          e.printStackTrace();
       } catch (IOException e) {
-         // TODO Auto-generated catch block
          e.printStackTrace();
       }
    }
 
    private void process() {
-      Connection conn = null;
-      String insertSQL = "insert into subscriber_detail(token,iteration,latency_in_ns) values (?,?,?)";
-		String DETAILS_COLUMN = "token,iteration,latency_in_ns";
       resetValues();
       logger.info("\nTest Run [" + ++runCounter + "] started >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       List<SubscriberGroup> subscriberGroups = subscriberSettings.getSubscriberGroups();
@@ -173,26 +167,6 @@ public class Extractor {
       }
 
       boolean allTasksFinished = false;
-      PreparedStatement psDetail = null;
-      try {
-         Class.forName("com.mysql.jdbc.Driver").newInstance();
-         conn = DriverManager.getConnection(dbUrl);
-         conn.setAutoCommit(true);
-         psDetail = conn.prepareStatement(insertSQL);
-      } catch (SQLException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      } catch (InstantiationException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      } catch (IllegalAccessException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      } catch (ClassNotFoundException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-
       while (!allTasksFinished) {
          allTasksFinished = true;
          for (SubscriberBase task : tasksList) {
@@ -213,12 +187,15 @@ public class Extractor {
       if (allTasksFinished)
          logger.info("All subscribers have finished sucessfully.");
 
-      int batchCount = 0;
       totalBytesRead = 0;
       totalMessagesRecd = 0;
       for (SubscriberBase task : tasksList) {
 
          if (task.getSubscriberStatistics() != null) {
+            if (task.getSubscriberStatistics().getTotalMessagesRecd() == 0) {
+               logger.error("Possible Problem - No messages recieved by this subscriber");
+               continue;
+            }
             if (task.getSubscriberStatistics().getProcessStartTime().getTime() < subscriberReadingStartTime.getTime())
                subscriberReadingStartTime = task.getSubscriberStatistics().getProcessStartTime();
 
@@ -228,38 +205,37 @@ public class Extractor {
             totalBytesRead += task.getSubscriberStatistics().getTotalBytesRecd();
             totalMessagesRecd += task.getSubscriberStatistics().getTotalMessagesRecd();
 
-            List<SubscriberDetail> statisticsList = task.getSubscriberStatistics().getData();
-		}
-
-      elapsedTimeInSecs = (double) (subscriberReadEndTime.getTime() - subscriberReadingStartTime.getTime()) / 1000;
-      totalBytesinMB = (double) totalBytesRead / (1024 * 1024);
-      messagesPerSecond = (double) totalMessagesRecd / elapsedTimeInSecs;
-      megaBytesReadPerSecond = (double) totalBytesinMB / elapsedTimeInSecs;
-      }
-      // addStatisticsToResult(new HashMap<String, String>());
-      try {
-			if("db".equalsIgnoreCase(dumpDestination) || dumpDestination==null || dumpDestination.trim().length()==0)
-			{
-			addSummaryToDB(new HashMap<String, String>());
-			}
-			else
-			{
-			addSummaryToFile(new HashMap<String, String>());
-			}
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-      logger.info("Test Run [" + runCounter + "] finished <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-      try {
-         if (conn != null) {
-            conn.close();
          }
-
-      } catch (SQLException e) {
-      }      
+            elapsedTimeInSecs = (double) (subscriberReadEndTime.getTime() - subscriberReadingStartTime.getTime()) / 1000;
+            totalBytesinMB = (double) totalBytesRead / (1024 * 1024);
+            messagesPerSecond = (double) totalMessagesRecd / elapsedTimeInSecs;
+            megaBytesReadPerSecond = (double) totalBytesinMB / elapsedTimeInSecs;
+      }
+      if(totalMessagesRecd <= 0)
+      {
+         logger.error("Attention !! No messages recieved by any subscriber. Please check if publishers are sending messages");
+         Date dummyDate=new Date();
+         subscriberReadingStartTime=dummyDate;
+         subscriberReadEndTime=dummyDate;
+      }
+      try {
+         if ("db".equalsIgnoreCase(dumpDestination) || dumpDestination == null || dumpDestination.trim().length() == 0) {
+            addSummaryToDB(new HashMap<String, String>());
+         } else {
+            addSummaryToFile(new HashMap<String, String>());
+         }
+      } catch (Exception e1) {
+         e1.printStackTrace();
+      }
+      logger.info("Test Run [" + runCounter + "] finished <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
    }
 
+   /**
+    * Create dynamic topic names for each subscriber
+    * @param numTopics
+    * @param key
+    * @return
+    */
    private String[] createTopicList(int numTopics, String key) {
       String[] topics = new String[numTopics];
 
@@ -270,6 +246,9 @@ public class Extractor {
       return topics;
    }
 
+   /**
+    * Reset variables
+    */
    private void resetValues() {
       sg = null;
       if (tasksList != null)
@@ -287,6 +266,11 @@ public class Extractor {
       subscriberReadEndTime = new Date(0);
    }
 
+   /**
+    * Create appropriate subscriber program instance
+    * @param className
+    * @return
+    */
    private SubscriberBase getTask(String className) {
       try {
          SubscriberBase t = (SubscriberBase) Class.forName(className).newInstance();
@@ -304,6 +288,9 @@ public class Extractor {
       return null;
    }
 
+   /**
+    * Distribute subscribers equally among topics.
+    */
    private void processForEqualDistribution() {
       int totalSubscribersPerTopic = sg.getTotalSubscribers() / topicArr.length;
       if (totalSubscribersPerTopic < 1) {
@@ -358,141 +345,135 @@ public class Extractor {
 
    }
 
-	private void addSummaryToDB(Map<String, String> attributes)
-			throws Exception {
-		Connection conn = null;
-		String insertSQL = "insert into subscriber_summary(token,iteration,start_date,end_date,num_subscribers,total_messages_recd,tput_msg_per_sec,total_mb_recd,tput_mb_per_sec,attributes,test_group_name,task_name) values (?,?,?,?,?,?,?,?,?,?,?,?)";
+   /**
+    * Add counters to summary tables
+    * @param attributes
+    * @throws Exception
+    */
+   private void addSummaryToDB(Map<String, String> attributes) throws Exception {
+      Connection conn = null;
+      String insertSQL = "insert into subscriber_summary(token,iteration,start_date,end_date,num_subscribers,total_messages_recd,tput_msg_per_sec,total_mb_recd,tput_mb_per_sec,attributes,test_group_name,task_name) values (?,?,?,?,?,?,?,?,?,?,?,?)";
 
-		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			conn = DriverManager.getConnection(dbUrl);
-			conn.setAutoCommit(true);
+      try {
+         Class.forName("com.mysql.jdbc.Driver").newInstance();
+         conn = DriverManager.getConnection(dbUrl);
+         conn.setAutoCommit(true);
 
-			if (conn != null) {
-				StringBuffer sbf = new StringBuffer();
-				if (attributes != null && attributes.size() > 0) {
-					for (Entry entry : attributes.entrySet()) {
-						sbf.append(entry.getValue()).append(",");
-					}
-				}
-				logger.info("Adding data to DB with token [" + instanceToken
-						+ "]");
-				PreparedStatement ps = conn.prepareStatement(insertSQL);
-				ps.setString(1, instanceToken);
-				ps.setInt(2, runCounter);
-				ps.setTimestamp(3, new java.sql.Timestamp(
-						subscriberReadingStartTime.getTime()));
-				ps.setTimestamp(4,
-						new java.sql.Timestamp(subscriberReadEndTime.getTime()));
-				ps.setInt(5, sg.getTotalSubscribers());
-				ps.setInt(6, new Double(totalMessagesRecd).intValue());
-				ps.setInt(7, new Double(messagesPerSecond).intValue());
-				ps.setInt(8, new Double(totalBytesinMB).intValue());
-				ps.setDouble(9, megaBytesReadPerSecond);
-				ps.setString(10, sbf.toString());
-				ps.setString(11, groupKey);
-				ps.setString(12, taskKey);
+         if (conn != null) {
+            StringBuffer sbf = new StringBuffer();
+            if (attributes != null && attributes.size() > 0) {
+               for (Entry entry : attributes.entrySet()) {
+                  sbf.append(entry.getValue()).append(",");
+               }
+            }
+            logger.info("Adding data to DB with token [" + instanceToken + "]");
+            PreparedStatement ps = conn.prepareStatement(insertSQL);
+            ps.setString(1, instanceToken);
+            ps.setInt(2, runCounter);
+            ps.setTimestamp(3, new java.sql.Timestamp(subscriberReadingStartTime.getTime()));
+            ps.setTimestamp(4, new java.sql.Timestamp(subscriberReadEndTime.getTime()));
+            ps.setInt(5, sg.getTotalSubscribers());
+            ps.setInt(6, new Double(totalMessagesRecd).intValue());
+            ps.setInt(7, new Double(messagesPerSecond).intValue());
+            ps.setInt(8, new Double(totalBytesinMB).intValue());
+            ps.setDouble(9, megaBytesReadPerSecond);
+            ps.setString(10, sbf.toString());
+            ps.setString(11, groupKey);
+            ps.setString(12, taskKey);
 
-				ps.execute();
-			}
-		} finally {
-			if (conn != null)
-				try {
-					conn.close();
-				} catch (SQLException e) {
-				}
-		}
+            ps.execute();
+         }
+      } finally {
+         if (conn != null)
+            try {
+               conn.close();
+            } catch (SQLException e) {
+            }
+      }
 
-	}
+   }
 
-	private void addSummaryToFile(Map<String, String> attributes)
-			 {
+   /**
+    * Add counters to summary file
+    * @param attributes
+    */
+   private void addSummaryToFile(Map<String, String> attributes) {
 
-		String SUMMARY_COLUMN = "token,iteration,start_date,end_date,num_subscribers,total_messages_recd,tput_msg_per_sec,total_mb_recd,tput_mb_per_sec,attributes,test_group_name,task_name";
+      String SUMMARY_COLUMN = "token,iteration,start_date,end_date,num_subscribers,total_messages_recd,tput_msg_per_sec,total_mb_recd,tput_mb_per_sec,attributes,test_group_name,task_name";
 
-		String[] spliit_on_comma_for_summary = SUMMARY_COLUMN.split(",");
-		FileWriter fileWriter = null;
-		File dir = null;
-		File file = null;
-		
-		URL location =  this.getClass().getResource("/csv");
-	    String exportPath = location.getPath();
-	    
-		dir = new File(exportPath);
-		if (!dir.exists()) {
-			// if dir is not exixt then create it
-			dir.mkdir();
-		}
-	
-		try {
-		
-			file=new File(exportPath+File.separator+"SubscriberSummary.csv");
+      String[] spliit_on_comma_for_summary = SUMMARY_COLUMN.split(",");
+      FileWriter fileWriter = null;
+      File dir = null;
+      File file = null;
 
-			fileWriter = new FileWriter(file, true);
+      URL location = this.getClass().getResource("/csv");
+      String exportPath = location.getPath();
 
-			if (file.length() == 0) {
+      dir = new File(exportPath);
+      if (!dir.exists()) {
+         // if dir is not exixt then create it
+         dir.mkdir();
+      }
 
-				for (int i = 0; i < spliit_on_comma_for_summary.length; i++) {
-					String[] c = spliit_on_comma_for_summary[i].split(":");
-					fileWriter.append(c[0]);
-					if (i != spliit_on_comma_for_summary.length - 1) {
-						fileWriter.append(",");
-					}
-				}
-				fileWriter.append("\n");
+      try {
 
-			}
+         file = new File(exportPath + File.separator + "SubscriberSummary.csv");
 
-			try {
+         fileWriter = new FileWriter(file, true);
 
-				StringBuffer sbf = new StringBuffer();
-				if (attributes != null && attributes.size() > 0) {
-					for (Entry entry : attributes.entrySet()) {
-						sbf.append(entry.getValue()).append(":");
-					}
-					logger.info("Adding data to file with token ["
-							+ instanceToken + "]");
-				}
-					fileWriter.append(instanceToken);
-					fileWriter.append(",");
-					fileWriter.append(String.valueOf(runCounter));
-					fileWriter.append(",");
-					fileWriter.append(String.valueOf(new java.sql.Timestamp(
-							subscriberReadingStartTime.getTime())));
-					fileWriter.append(",");
-					fileWriter.append(String.valueOf(new java.sql.Timestamp(
-							subscriberReadEndTime.getTime())));
-					fileWriter.append(",");
-					fileWriter.append(String.valueOf(sg.getTotalSubscribers()));
-					fileWriter.append(",");
-					fileWriter.append(String.valueOf(new Double(
-							totalMessagesRecd).intValue()));
-					fileWriter.append(",");
-					fileWriter.append(String.valueOf(new Double(
-							messagesPerSecond).intValue()));
-					fileWriter.append(",");
-					fileWriter.append(String.valueOf(new Double(totalBytesinMB)
-							.intValue()));
-					fileWriter.append(",");
-					fileWriter.append(String.valueOf(megaBytesReadPerSecond));
-					fileWriter.append(",");
-					fileWriter.append(sbf.toString());
-					fileWriter.append(",");
-					fileWriter.append(groupKey);
-					fileWriter.append(",");
-					fileWriter.append(taskKey);
-					fileWriter.append("\n");
+         if (file.length() == 0) {
 
-				
-			} finally {
+            for (int i = 0; i < spliit_on_comma_for_summary.length; i++) {
+               String[] c = spliit_on_comma_for_summary[i].split(":");
+               fileWriter.append(c[0]);
+               if (i != spliit_on_comma_for_summary.length - 1) {
+                  fileWriter.append(",");
+               }
+            }
+            fileWriter.append("\n");
+         }
 
-				fileWriter.close();
+         try {
 
-			}
+            StringBuffer sbf = new StringBuffer();
+            if (attributes != null && attributes.size() > 0) {
+               for (Entry entry : attributes.entrySet()) {
+                  sbf.append(entry.getValue()).append(":");
+               }
+               logger.info("Adding data to file with token [" + instanceToken + "]");
+            }
+            fileWriter.append(instanceToken);
+            fileWriter.append(",");
+            fileWriter.append(String.valueOf(runCounter));
+            fileWriter.append(",");
+            fileWriter.append(String.valueOf(new java.sql.Timestamp(subscriberReadingStartTime.getTime())));
+            fileWriter.append(",");
+            fileWriter.append(String.valueOf(new java.sql.Timestamp(subscriberReadEndTime.getTime())));
+            fileWriter.append(",");
+            fileWriter.append(String.valueOf(sg.getTotalSubscribers()));
+            fileWriter.append(",");
+            fileWriter.append(String.valueOf(new Double(totalMessagesRecd).intValue()));
+            fileWriter.append(",");
+            fileWriter.append(String.valueOf(new Double(messagesPerSecond).intValue()));
+            fileWriter.append(",");
+            fileWriter.append(String.valueOf(new Double(totalBytesinMB).intValue()));
+            fileWriter.append(",");
+            fileWriter.append(String.valueOf(megaBytesReadPerSecond));
+            fileWriter.append(",");
+            fileWriter.append(sbf.toString());
+            fileWriter.append(",");
+            fileWriter.append(groupKey);
+            fileWriter.append(",");
+            fileWriter.append(taskKey);
+            fileWriter.append("\n");
 
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-	}
+         } finally {
+            fileWriter.close();
+         }
+
+      } catch (Exception e) {
+         // TODO: handle exception
+         e.printStackTrace();
+      }
+   }
 }

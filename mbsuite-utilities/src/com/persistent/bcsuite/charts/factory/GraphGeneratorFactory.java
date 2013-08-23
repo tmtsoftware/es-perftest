@@ -134,20 +134,20 @@ public class GraphGeneratorFactory {
          PieChart peiChart = new PieChart(title, graphType.name(), strToken, GraphTypes.MSGCNT);
          return peiChart;             
 
-      case LTNCNT:
+      case LTNCNT1G:
          title = "Latency per message ";
          xLabel = "Message Samples";
          yLabel = "Latency (in microseconds)";
          ScatterChart scatterChart = new ScatterChart(title, graphType.name(), xLabel, yLabel, null,
-                  BCSuiteConstants.DB_COL_LATENCY_IN_MS, strToken, GraphTypes.LTNCNT);
+                  BCSuiteConstants.DB_COL_LATENCY_IN_MS, strToken, GraphTypes.LTNCNT1G);
          return scatterChart;
 
-      case LTNPER:
+      case LTNPER1G:
          title = "Latency as a percentile of dataset";
          xLabel = "% of Sample";
          yLabel = "Latency (in microseconds)";
          LatencyPercentileChart ltncyPerScatterChart = new LatencyPercentileChart(title, graphType.name(), xLabel,
-                  yLabel, null, BCSuiteConstants.DB_COL_LATENCY_IN_MS, strToken, GraphTypes.LTNPER);
+                  yLabel, null, BCSuiteConstants.DB_COL_LATENCY_IN_MS, strToken, GraphTypes.LTNPER1G);
          return ltncyPerScatterChart;
       default:
          System.out.println("Graph Type [" + graphType + "] not supported");

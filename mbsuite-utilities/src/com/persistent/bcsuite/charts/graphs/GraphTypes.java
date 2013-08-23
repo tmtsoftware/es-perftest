@@ -67,16 +67,23 @@ public enum GraphTypes {
 	/**
 	 * Graph for displaying the latency.
 	 */
-	LTNCNT(
-	         "select (latency_in_nanos/2)/1000 as latency_in_nanos from publisher_detail pd where "
-            + "pd.token=?"),
+   LTNCNT1G(
+                     "select (latency_in_nanos/2)/1000 as latency_in_nanos from publisher_detail pd where "
+                     + "pd.token like ? and token not like '%10G%'"),
+   LTNCNT10G(
+                              "select (latency_in_nanos/2)/1000 as latency_in_nanos from publisher_detail pd where "
+                              + "pd.token like ? and  token like '%10G%'"),
 	/**
 	 * Graph for displaying the latency percentile
 	 */
-	LTNPER(
+	LTNPER1G(
 			"select (latency_in_nanos/2)/1000 as latency_in_nanos from publisher_detail pd where "
-					+ "pd.token=?");
+					+ "pd.token like ? and token not like '%10G'"),
 
+   LTNPER10G(
+            "select (latency_in_nanos/2)/1000 as latency_in_nanos from publisher_detail pd where "
+                  + "pd.token like ? and token like '%10G'");
+	
 	private String graphType;
 
 	GraphTypes(String graphType) {
@@ -110,11 +117,15 @@ public enum GraphTypes {
 				return SVPUB;
 			} else if (strGraphType.equals(MSGCNT.name())) {
 				return MSGCNT;
-			} else if (strGraphType.equals(LTNCNT.name())) {
-				return LTNCNT;
-			}else if(strGraphType.equals(LTNPER.name())){
-				return LTNPER;
-			}
+			} else if (strGraphType.equals(LTNCNT1G.name())) {
+				return LTNCNT1G;
+			}else if(strGraphType.equals(LTNPER1G.name())){
+				return LTNPER1G;
+			}else if (strGraphType.equals(LTNCNT10G.name())) {
+            return LTNCNT10G;
+         }else if(strGraphType.equals(LTNPER10G.name())){
+            return LTNPER10G;
+         }
 		}
 		return null;
 	}

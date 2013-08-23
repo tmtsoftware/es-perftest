@@ -91,9 +91,16 @@ public class ReportGenerator {
 			}
 			String strGraphType = arrGTypeToken[0].trim();
 			String token = arrGTypeToken[1].trim();
-			Graph gp = graphFactory.getGraph(token,strGraphType);
-			if(gp != null)
-			graphs.add(gp);			
+			
+			GraphTypes graphType = GraphTypes.fromString(strGraphType);
+         if(graphType == null)
+         {
+            graphs.add(graphFactory.getGraph(token,strGraphType));
+         }
+         else
+         {
+            graphs.add(graphFactory.getGraph(graphType, token));
+         }	
 		}
 		graphPlot.plotGraph(graphs);
 		generateHTMLReport(graphs, BCSuiteConstants.REPORT_FILE_NAME);
