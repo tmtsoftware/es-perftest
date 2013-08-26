@@ -37,7 +37,7 @@ for (( j=$MIN; j <= $MAX; j=j+$increment ))
  #copy the  test specific config parameter values from "publisher-config.tmpl" to  "publisher-config.xml"
  cp ../../config/publisher-config.tmpl ../../config/publisher-config.xml
  sed -i 's/@runSec/'$runSec'/g' ../../config/publisher-config.xml 
- sed -i 's/@msgSize/'$msgSize'/g' ../../config/publisher-config.xml 
+ sed -i 's/@msgSize/'$j'/g' ../../config/publisher-config.xml 
  sed -i 's/@maxPublisher/'$maxPublisher'/g' ../../config/publisher-config.xml 
  sed -i 's/@dumpDetails/'$dumpDetails'/g' ../../config/publisher-config.xml
  sed -i 's/@maxTopics/'$maxTopics'/g' ../../config/publisher-config.xml 
