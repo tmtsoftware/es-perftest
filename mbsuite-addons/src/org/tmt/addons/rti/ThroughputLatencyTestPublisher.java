@@ -20,7 +20,6 @@ import com.rti.dds.infrastructure.InstanceHandle_t;
 import com.rti.dds.infrastructure.RETCODE_NO_DATA;
 import com.rti.dds.infrastructure.ResourceLimitsQosPolicy;
 import com.rti.dds.infrastructure.StatusKind;
-import com.rti.dds.infrastructure.TransportUnicastSettings_t;
 import com.rti.dds.publication.DataWriterQos;
 import com.rti.dds.publication.PublicationMatchedStatus;
 import com.rti.dds.publication.Publisher;
@@ -41,7 +40,7 @@ import com.rti.ndds.transport.UDPv4Transport;
 /**
  * Publisher class that publishes to the subscriber and receives messages that
  * the subscriber echoes back.
- *
+ * 
  */
 public class ThroughputLatencyTestPublisher extends PublisherBase {
 	private static Logger logger = Logger
@@ -74,9 +73,9 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 	private int throttlingFactor = 0;
 	private int latencyCaptureWindow;
 	boolean isReliable = false;
-	
+
 	/**
-	 * Initialize all the datareaders, datawriters, subscribers, publishers and 
+	 * Initialize all the datareaders, datawriters, subscribers, publishers and
 	 * participants.
 	 * 
 	 */
@@ -153,7 +152,7 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 		if (receiverParticipant == null) {
 			RTIQosHelper.configure_participant_qos(receiver_participant_qos,
 					factory, counter + 20);
-			receiverParticipant = factory.create_participant(0,
+			receiverParticipant = factory.create_participant(80,
 					receiver_participant_qos, null, // listener
 					StatusKind.STATUS_MASK_NONE);
 			UDPv4Transport.Property_t udpv4TransportProperty = new UDPv4Transport.Property_t();
@@ -188,7 +187,6 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 		// data writer
 		publisher.get_default_datawriter_qos(writer_qos);
 
-		
 		int max_gather_send_buffers = 16;
 		String strReliable = attributes.get("isReliable");
 		if (strReliable != null && !strReliable.isEmpty()) {
@@ -198,10 +196,11 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 		RTIQosHelper.configure_data_writer_qos(writer_qos, false,
 				max_gather_send_buffers, publisher, false, false, isReliable,
 				counter);
-		writer_qos.history.depth = 1;
+
 		writer = (LatencyDataWriter) publisher.create_datawriter(data_topic,
 				writer_qos, null, // listener
 				StatusKind.STATUS_MASK_NONE);
+		// writer_qos.batch.enable =true;
 		// --- Create reader --- //
 		listener = new NewLatencyListener(num_iterations);
 
@@ -209,15 +208,6 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 		RTIQosHelper.configure_data_reader_qos(reader_qos, subscriber,
 				isReliable, counter);
 
-		TransportUnicastSettings_t setting = new TransportUnicastSettings_t();
-		logger.info("Searching for available ports to use");
-		int myport = RTIQosHelper.findPort();
-		setting.receive_port = myport;
-		logger.info("Receive port for this data reader = "
-				+ setting.receive_port);
-		reader_qos.unicast.value.clear();
-		reader_qos.unicast.value.add(setting);
-		reader_qos.history.depth = 1;
 		reader = (LatencyDataReader) subscriber
 				.create_datareader(
 						echo_topic,
@@ -235,27 +225,26 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 	}
 
 	/**
-	 * Checks whether all the subscribers for the publisher are matched.
-	 * The publisher starts writing data after all the subscribers have 
-	 * joined.
+	 * Checks whether all the subscribers for the publisher are matched. The
+	 * publisher starts writing data after all the subscribers have joined.
 	 */
 	@Override
 	public boolean isReadyToRun() {
 		// wait for the requisite number of readers to appear
 		PublicationMatchedStatus matched_status = new PublicationMatchedStatus();
 		writer.get_publication_matched_status(matched_status);
-		if (matched_status.current_count > 0) {
-			System.out.println("Data Writer Publication Matched");
+		if (matched_status.current_count >= 2) {
+			logger.info("Data Writer Publication Matched");
 		}
-		System.out.println(" Data Writer Publication  Not Matched");
+		logger.debug(" Data Writer Publication  Not Matched");
 
 		SubscriptionMatchedStatus readerMatchedStatus = new SubscriptionMatchedStatus();
 		reader.get_subscription_matched_status(readerMatchedStatus);
 		if (readerMatchedStatus.current_count > 0) {
-			System.out.println("Data Reader Subscription Matched");
+			logger.info("Data Reader Subscription Matched");
 			return true; // found everybody, can move on
 		}
-		System.out.println("Data Reader Subscription NOT Matched");
+		logger.debug("Data Reader Subscription NOT Matched");
 
 		return false;
 	}
@@ -267,7 +256,7 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 	}
 
 	/**
-	 * Sends the message to the subscriber. 
+	 * Sends the message to the subscriber.
 	 */
 	@Override
 	public void sendMessageForLatency(byte[] message) {
@@ -286,8 +275,8 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 						&& canContinue; instance.sequence_number++) {
 					instance.sentTime = System.nanoTime();
 					writer.write(instance, instance_handle); // -- Write --
-					logger.info("seqnumber = " + instance.sequence_number
-							+ ", sent time = " + instance.sentTime);
+					// logger.info("seqnumber = " + instance.sequence_number
+					// + ", sent time = " + instance.sentTime);
 					addToStatisticsPool(getMessageLength());
 				}
 			} catch (Exception ex) {
@@ -299,12 +288,18 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 		// instance.data.setMaximum(20);
 		// listener.start_one_message(instance.sequence_number);
 		writer.write(instance, instance_handle);
-
+		logger.info("Publisher Thread Sleeping for 5 seconds");
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		markTaskComplete();
 	}
 
 	/**
-	 * Cleans up all the factory, publisher, subscriber objects. 
+	 * Cleans up all the factory, publisher, subscriber objects.
 	 */
 	@Override
 	public void cleanup() {
@@ -338,9 +333,9 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 
 	/**
 	 * 
-	 * Class that implements the DataReaderAdapter class of 
-	 * RTI. Required to be able to listen and receive messages.
-	 *
+	 * Class that implements the DataReaderAdapter class of RTI. Required to be
+	 * able to listen and receive messages.
+	 * 
 	 */
 	private class NewLatencyListener extends DataReaderAdapter {
 		private int _num_iterations, _expected_sn = 1, _received_sn,
@@ -378,8 +373,8 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 		}
 
 		/**
-		 * This method is called whenever there is data available for reading for this 
-		 * datareader. 
+		 * This method is called whenever there is data available for reading
+		 * for this datareader.
 		 */
 		public synchronized void on_data_available(DataReader reader) {
 			LatencyDataReader latency_reader = (LatencyDataReader) reader;
@@ -396,33 +391,32 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 					if (info.valid_data) {
 						Latency msg = (Latency) data_seq.get(i);
 						_received_sn = msg.sequence_number;
-						if (_received_sn == _expected_sn) {
-							long time_received = System.nanoTime();
-							logger.info("Echoed back - seqnumber = "
-									+ _received_sn + ", sent time = "
-									+ msg.sentTime + " received time = "
-									+ time_received);
-							long roundtrip_time = time_received - msg.sentTime
-									- _clock_overhead;
-							if (msgCounter > latencyCaptureWindow) {
-								addLatencyStatistics(
-										String.valueOf(msgCounter),
-										roundtrip_time);
-								msgCounter = 0;
-							}
+						// if (_received_sn == _expected_sn) {
+						long time_received = System.nanoTime();
+						// logger.debug("Echoed back - seqnumber = "
+						// + _received_sn + ", sent time = "
+						// + msg.sentTime + " received time = "
+						// + time_received);
+						long roundtrip_time = time_received - msg.sentTime
+								- _clock_overhead;
+						if (msgCounter > latencyCaptureWindow) {
+							addLatencyStatistics(String.valueOf(msgCounter),
+									roundtrip_time);
+							msgCounter = 0;
+						}
 
-							// notify(); // let the main thread send another
-							// packet
-						} else {
-							System.out.println("**********ERROR: "
-									+ "Received SN " + msg.sequence_number
-									+ "!= expected " + _expected_sn);
-						}
-						if (msg.sequence_number > _num_iterations) {
-							System.out.println("**********ERROR: "
-									+ "Received SN > expected "
-									+ _num_iterations);
-						}
+						// notify(); // let the main thread send another
+						// packet
+						// } else {
+						// logger.error("**********ERROR: "
+						// + "Received SN " + msg.sequence_number
+						// + "!= expected " + _expected_sn);
+						// }
+						// if (msg.sequence_number > _num_iterations) {
+						// System.out.println("**********ERROR: "
+						// + "Received SN > expected "
+						// + _num_iterations);
+						// }
 					}
 					_expected_sn++;
 				}

@@ -189,7 +189,7 @@ public class ReportUtils {
 		double[][] result = new double[100][100];
 		Percentile pecentile = new Percentile();
 		pecentile.setData(distribution);
-		for (int i = 1; i < 100; i++) {
+		for (int i = 1; i <= 100; i++) {
 			int j = 0;
 			result[i - 1][j] = i - 1;
 			result[i - 1][j + 1] = pecentile.evaluate(i);

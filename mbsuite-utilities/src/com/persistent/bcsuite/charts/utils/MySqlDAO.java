@@ -32,7 +32,7 @@ public class MySqlDAO {
 				.loadConfig(BCSuiteConstants.COLLECTOR_CONFIG_FILE);
 		
 		sqlQueryMap = ReportUtils.loadConfig("properties/queries.properties");
-
+		//logger.info(sqlQueryMap);
 		commonSettingsMap = ReportUtils
 				.loadConfig("common-settings.properties");
 				
@@ -113,6 +113,7 @@ public class MySqlDAO {
 	     Map<String,Object> dataSet = new HashMap<String,Object>();
 	     String xLabel=null;
 	     String yLabel=null;
+	     logger.info("Report Type = ["+reportType+"]");
 	     String strSQLQueryToken = sqlQueryMap.get(reportType);
 	     double maxValue=0;
 	     String[] s = strSQLQueryToken.split("#");

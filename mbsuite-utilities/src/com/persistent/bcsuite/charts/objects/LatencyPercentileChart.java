@@ -32,7 +32,6 @@ public class LatencyPercentileChart extends ScatterChart {
 
 	@Override
 	public void plot() throws IOException, ClassNotFoundException, SQLException {
-
 		JFreeChart chart = ChartFactory.createScatterPlot(getTitle(), getxLabel(),
 				getyLabel(), createDataset(), PlotOrientation.VERTICAL, true, true,
 				false);

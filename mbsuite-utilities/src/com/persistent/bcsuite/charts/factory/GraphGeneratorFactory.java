@@ -9,6 +9,7 @@ import com.persistent.bcsuite.charts.graphs.GraphTypes;
 import com.persistent.bcsuite.charts.objects.GenericBarChart;
 import com.persistent.bcsuite.charts.objects.GenericLineChart;
 import com.persistent.bcsuite.charts.objects.GenericPieChart;
+import com.persistent.bcsuite.charts.objects.GenericScatterChart;
 import com.persistent.bcsuite.charts.objects.Graph;
 import com.persistent.bcsuite.charts.objects.LatencyPercentileChart;
 import com.persistent.bcsuite.charts.objects.LineChart;
@@ -48,6 +49,11 @@ public class GraphGeneratorFactory {
          {
             GenericPieChart genericPieChart = new GenericPieChart(reportType, strToken);
             g = genericPieChart;
+         }
+         else if ("scatter".equalsIgnoreCase(reportTypes.get(reportType))) 
+         {
+            GenericScatterChart genericScatterChart = new GenericScatterChart(reportType, strToken);
+            g = genericScatterChart;
          }
          else
          {

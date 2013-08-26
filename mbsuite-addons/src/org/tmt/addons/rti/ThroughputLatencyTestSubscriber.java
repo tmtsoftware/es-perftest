@@ -19,7 +19,6 @@ import com.rti.dds.infrastructure.InstanceHandle_t;
 import com.rti.dds.infrastructure.RETCODE_NO_DATA;
 import com.rti.dds.infrastructure.ResourceLimitsQosPolicy;
 import com.rti.dds.infrastructure.StatusKind;
-import com.rti.dds.infrastructure.TransportUnicastSettings_t;
 import com.rti.dds.publication.DataWriterQos;
 import com.rti.dds.publication.Publisher;
 import com.rti.dds.subscription.DataReader;
@@ -67,6 +66,8 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 	private String topicName;
 	private static int counter = 0;
 	private boolean canRun = true;
+	private int numOfDataReaders = 1;
+	boolean isReliable = false;
 
 	/**
 	 * Initialize all the datareaders, datawriters, subscribers, publishers and
@@ -84,17 +85,35 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 			maxObjectsPerThread = 1024;
 		}
 
+		String strReliable = attributes.get("isReliable");
+		if (strReliable != null && !strReliable.isEmpty()) {
+			isReliable = Boolean.parseBoolean(strReliable);
+			logger.info("Setting Reliability " + isReliable);
+		}
+
+		String nr = attributes.get("numOfDataReaders");
+
+		try {
+			numOfDataReaders = Integer.parseInt(nr);
+		} catch (Exception e) {
+			logger.info("Cannot parse numOfDataReaders.. using default as 1");
+			numOfDataReaders = 1;
+			;
+		}
+
 		logger.info("Using maxObjectsPerThread as [" + maxObjectsPerThread
 				+ "]");
 
 		topicName = attributes.get("topic");
 
 		logger.info("Using topic as [" + topicName + "]");
+		if (factory == null) { // Once initialized no need to do it again for
+			// other threads.
+			factory = DomainParticipantFactory.get_instance();
+			RTIQosHelper.configure_factory_qos(factory_qos, factory,
+					maxObjectsPerThread);
+		}
 		// Need to change default plugin property
-		factory = DomainParticipantFactory.get_instance();
-		factory.get_qos(factory_qos);
-		factory_qos.entity_factory.autoenable_created_entities = false;
-		factory.set_qos(factory_qos);
 
 		UDPv4Transport.Property_t property = new UDPv4Transport.Property_t();
 		if (recieverParticipant == null) {
@@ -118,7 +137,7 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 			RTIQosHelper.configure_participant_qos(sender_participant_qos,
 					factory, counter + 80);
 			// Now we can create the 'disabled' participant.
-			senderParticipant = factory.create_participant(0,
+			senderParticipant = factory.create_participant(80,
 					sender_participant_qos, null, // listener
 					StatusKind.STATUS_MASK_NONE);
 			UDPv4Transport.Property_t udpv4TransportProperty = new UDPv4Transport.Property_t();
@@ -155,24 +174,11 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 		// echo writer
 		publisher.get_default_datawriter_qos(writer_qos);
 
-		boolean isReliable = false;
 		int max_gather_send_buffers = 16;
-		String strReliable = attributes.get("isReliable");
-		if (strReliable != null && !strReliable.isEmpty()) {
-			isReliable = Boolean.parseBoolean(strReliable);
-			logger.info("Setting Reliability " + isReliable);
-		}
+
 		RTIQosHelper.configure_data_writer_qos(writer_qos, false,
 				max_gather_send_buffers, publisher, false, false, isReliable,
 				counter);
-		writer_qos.history.depth = 1;
-		TransportUnicastSettings_t setting = new TransportUnicastSettings_t();
-		int myport = RTIQosHelper.findPort();
-		setting.receive_port = myport;
-		logger.info("Recieve port for this data writer = "
-				+ setting.receive_port);
-		writer_qos.unicast.value.clear();
-		writer_qos.unicast.value.add(setting);
 
 		writer = (LatencyDataWriter) publisher.create_datawriter(echo_topic,
 				writer_qos, null, // listener
@@ -184,14 +190,19 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 
 		RTIQosHelper.configure_data_reader_qos(reader_qos, subscriber,
 				isReliable, counter);
-		reader_qos.history.depth = 1;
 
-		reader = (LatencyDataReader) subscriber
-				.create_datareader(
-						data_topic,
-						reader_qos,
-						listener,
-						(StatusKind.DATA_AVAILABLE_STATUS | StatusKind.REQUESTED_INCOMPATIBLE_QOS_STATUS));
+		if (numOfDataReaders == 1) {
+			reader = (LatencyDataReader) subscriber
+					.create_datareader(
+							data_topic,
+							reader_qos,
+							listener,
+							(StatusKind.DATA_AVAILABLE_STATUS | StatusKind.REQUESTED_INCOMPATIBLE_QOS_STATUS));
+		} else {
+			for (int i = 0; i < numOfDataReaders; i++) {
+				createDataReaders();
+			}
+		}
 
 		counter++;
 
@@ -206,6 +217,16 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 		//
 		// }
 		// }
+	}
+
+	private DataReader createDataReaders() {
+		DataReader newReader = (LatencyDataReader) subscriber
+				.create_datareader(
+						data_topic,
+						reader_qos,
+						new LatencyListener(writer, instance_handle, cookie),
+						(StatusKind.DATA_AVAILABLE_STATUS | StatusKind.REQUESTED_INCOMPATIBLE_QOS_STATUS));
+		return newReader;
 	}
 
 	/**
@@ -223,8 +244,6 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 			} // sleep for 1 sec
 		}
 
-		markTaskComplete();
-
 	}
 
 	/**
@@ -232,6 +251,7 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 	 */
 	@Override
 	public void shutdown() {
+		logger.info("Messages recevied = [" + msgReceived + "]");
 		counter--;
 		canRun = false;
 		if (counter == 0) {
@@ -259,7 +279,11 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 		} else {
 			logger.info("Counter is non zero, cannot destroy participants");
 		}
+
+		markTaskComplete();
 	}
+
+	private static long msgReceived = 0;
 
 	/**
 	 * 
@@ -315,6 +339,7 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 				for (int i = 0; i < data_seq.size(); ++i) {
 					SampleInfo info = (SampleInfo) info_seq.get(i);
 					if (info.valid_data) {
+						msgReceived++;
 						Latency msg = (Latency) data_seq.get(i);
 						byte cookie = msg.data.getByte(0);
 						_sequence_number = msg.sequence_number;

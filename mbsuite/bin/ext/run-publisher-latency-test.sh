@@ -23,7 +23,7 @@ runForSec=$(( $totalRun * $runSec + 5 ))
 
 #start the sar test for specified sec & o/p of sar is stored in  "../../export/data-files/" dir
 
-# sar test is disabled because all statistics data is captured by other utilities
+#sar test is disabled because all statistics data is captured by other utilities
 #to enable sar test uncomment following two lines 
 
 #echo "sar-test for  latency-test started [$runForSec sec] ..."

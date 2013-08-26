@@ -37,7 +37,7 @@ public class GenericScatterChart implements Graph {
    private String xLabel;
    private String yLabel;
 
-   public GenericScatterChart(String token, String reportType) {
+   public GenericScatterChart(String reportType,String token) {
       this.filename = reportType + BCSuiteConstants.FILE_TYPE_EXTN_PNG;
       this.strToken = token;
       this.reportType = reportType;
@@ -52,7 +52,8 @@ public class GenericScatterChart implements Graph {
     */
    @Override
    public void plot() throws IOException, ClassNotFoundException, SQLException {
-      JFreeChart chart = ChartFactory.createScatterPlot(this.title, this.xLabel, this.yLabel, createDataset(),
+      XYDataset dataset = createDataset();
+      JFreeChart chart = ChartFactory.createScatterPlot(this.title, this.xLabel, this.yLabel,dataset ,
                PlotOrientation.VERTICAL, true, true, false);
       XYPlot xyPlot = (XYPlot) chart.getPlot();
       /*
@@ -65,9 +66,11 @@ public class GenericScatterChart implements Graph {
    }
 
    private XYDataset createDataset() throws IOException, ClassNotFoundException, SQLException {
+      logger.info("Create data set called");
       HashMap<String, Double[][]> scatterValueMap = new HashMap<String, Double[][]>();
       MySqlDAO dao = new MySqlDAO();
       dao.init();
+      logger.info("DAO inited");
       XYSeriesCollection result = new XYSeriesCollection();
       try {
          Map<String, Object> dmap = dao.getGenericSummaryValueSet(reportType, strToken);
@@ -77,6 +80,7 @@ public class GenericScatterChart implements Graph {
             return null;
          }
          double[][] valuesArray = (double[][]) dmap.get("data");
+         logger.info("value array = " + valuesArray);
          xLabel = (String) dmap.get("xLabel");
          yLabel = (String) dmap.get("yLabel");
          title = (String) dmap.get("title");
@@ -96,7 +100,8 @@ public class GenericScatterChart implements Graph {
             result.addSeries(series);
          }
       } catch (Exception e) {
-
+         logger.error("Recieved exception in GenericScatterChart " + e);
+         e.printStackTrace();
       } finally {
          dao.cleanUp();
       }
