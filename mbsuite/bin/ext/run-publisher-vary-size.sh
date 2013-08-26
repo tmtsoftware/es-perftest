@@ -46,6 +46,7 @@ for (( j=$MIN; j <= $MAX; j=j+$increment ))
 token=$6-$j
 
 
+
 #run the generator utility which actually sends the messages.
 #loads the external jars from "ext-lib" , utility jars from "lib" & configuration parameter from .tmpl file inside  "config" dir  	
 	 java -d64 -Xms4048M -Xmx14048M -cp  "../../ext-lib/*":"../../ext-lib/rti/*":"../../export/data-files/*":"../../lib/*":"../../config/":"../../export/"  com.persistent.bcsuite.process.Generator $key $groupName $token $iteration  >> logs/run-publisher-vary-size.log  &
