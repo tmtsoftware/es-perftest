@@ -3,6 +3,7 @@ package com.persistent.bcsuite.support;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,38 @@ public class DataStore {
       }
    }
 
+   public static boolean isSubscriberSummaryRecordAvailable(String instanceToken,String targetDB,int runCounter) throws SQLException
+   {
+      Connection conn = getConnection(targetDB);
+      if (conn == null)
+         return false;
+      try {
+         PreparedStatement psDetail = conn.prepareStatement("SELECT count(*) from subscriber_summary where TOKEN=? and iteration = ?");
+         psDetail.setString(1, instanceToken);
+         psDetail.setInt(2, runCounter);
+         ResultSet rs = psDetail.executeQuery();
+         if(rs != null)
+         {
+            while(rs.next())
+            {
+               int count = rs.getInt(1);
+               if(count >0)
+               {
+                  return true;
+               }
+            }
+         }
+      }catch(Exception e)
+      {
+         e.printStackTrace();
+      }finally
+      {
+         conn.close();
+      }
+      return false;
+   }
+   
+   
    @SuppressWarnings("rawtypes")
    public static void saveSummary(String targetDB, Map<String, String> attributes, Map<String, Object> params)
             throws SQLException {

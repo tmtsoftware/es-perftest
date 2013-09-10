@@ -57,7 +57,7 @@ runForSec=$(( $totalRun * $runSec + 5 ))
 	#get the PID of DISK statistics process
 	diskPid=$!
 	#calls the NETWORK statistics script with required parameter & dump data to "log/" dir
-	./run-network-statistics.sh $((runSec+65)) $token $interval publisher-network >> logs/publisher-network.log &
+	./run-network-statistics.sh $((runSec+5)) $token $interval publisher-network >> logs/publisher-network.log &
 	#get the PID of NETWORK statistics process
 	networkPid=$!
 	#calls the HEAP statistics script with required parameter & dump data to "log/" dir

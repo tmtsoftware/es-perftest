@@ -227,7 +227,10 @@ public class Generator extends BaseGenerator {
 			} else {
 				logger.info("Ignoring this test run, not saving data to DB");
 			}
-
+			
+			if(repeatCounter > 1)
+			verifySubscriberCompletion(runCounter);
+			
 			if (pg.getIterationDrainTimeInMillis() > 0) {
 				logger.info("Will wait for specified iteration drain time ["
 						+ pg.getIterationDrainTimeInMillis() + "] ms");
@@ -258,7 +261,9 @@ public class Generator extends BaseGenerator {
 				} catch (Throwable t) {
 				}
 			}
-
+			
+			
+			
 			logger.info("Test Run [" + runCounter
 					+ "] finished <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		} catch (Throwable t) {
@@ -278,7 +283,25 @@ public class Generator extends BaseGenerator {
 		}
 	}
 
-	private String[] generateTopicArray(int numTopics, String key) {
+	private void verifySubscriberCompletion(int runCounter) throws SQLException {
+      logger.info("Checking to see if Subscriber Summary record is added...");
+      
+      while(true)
+      {
+         if(DataStore.isSubscriberSummaryRecordAvailable(instanceToken, dbUrl,runCounter))
+         {
+            logger.info("Found subscriber summary record for token [" + instanceToken +"]");
+            break;
+         }
+         logger.info("No subscriber summary record yet for token ["+instanceToken +"], waiting for subscriber program to add it");
+         try {
+            Thread.sleep(1000);
+         } catch (InterruptedException e) {
+         }
+      }
+   }
+
+   private String[] generateTopicArray(int numTopics, String key) {
 		ArrayList<String> topicArr = new ArrayList<String>();
 
 		logger.debug("Creating [" + numTopics + "] in topicArray");

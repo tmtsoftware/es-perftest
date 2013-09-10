@@ -63,7 +63,7 @@ token=$6-$j
 	#get the PID of DISK statistics process
 	diskPid=$!
 	#calls the NETWORK statistics script with required parameter & dump data to "log/" dir
-	./run-network-statistics.sh $((shutdownDelay+65)) $token $interval subscriber-network >> logs/subscriber-network.log &
+	./run-network-statistics.sh $((shutdownDelay+5)) $token $interval subscriber-network >> logs/subscriber-network.log &
 	#get the PID of NETWORK statistics process
 	networkPid=$!
 	#calls the HEAP statistics script with required parameter & dump data to "log/" dir

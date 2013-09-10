@@ -223,6 +223,7 @@ public class ThroughputSubscriber extends SubscriberBase {
 		ThroughputDataReader data_reader_New = (ThroughputDataReader) subscriber
 				.create_datareader(data_topic, data_reader_qos, data_listener,
 						StatusKind.STATUS_MASK_ALL);
+		
 		data_reader_New.enable();
 		return data_reader_New;
 	}
@@ -307,7 +308,7 @@ public class ThroughputSubscriber extends SubscriberBase {
 			try {
 				dataReader.take(dataSeq, infoSeq,
 						ResourceLimitsQosPolicy.LENGTH_UNLIMITED,
-						SampleStateKind.NOT_READ_SAMPLE_STATE,
+						SampleStateKind.ANY_SAMPLE_STATE,
 						ViewStateKind.ANY_VIEW_STATE,
 						InstanceStateKind.ALIVE_INSTANCE_STATE);
 

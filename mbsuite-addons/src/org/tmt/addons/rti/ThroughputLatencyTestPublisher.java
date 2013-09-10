@@ -290,7 +290,7 @@ public class ThroughputLatencyTestPublisher extends PublisherBase {
 		writer.write(instance, instance_handle);
 		logger.info("Publisher Thread Sleeping for 5 seconds");
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(6000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

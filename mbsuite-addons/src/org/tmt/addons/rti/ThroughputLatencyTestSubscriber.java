@@ -2,6 +2,7 @@ package org.tmt.addons.rti;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.log4j.Logger;
 import org.tmt.addons.rti.latency.Latency;
@@ -205,7 +206,7 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 		}
 
 		counter++;
-
+	
 		// while (true) {
 		// PublicationMatchedStatus pubMatch = new PublicationMatchedStatus();
 		// writer.get_publication_matched_status(pubMatch);
@@ -345,7 +346,7 @@ public class ThroughputLatencyTestSubscriber extends SubscriberBase {
 						_sequence_number = msg.sequence_number;
 						addToStatisticsPool(null, msg.data.size(), new Date());
 						if (cookie == _cookie) {
-							_writer.write(msg, _instance_handle);
+							 _writer.write(msg, _instance_handle);
 							++_num_replies;
 						}
 						if (msg.sequence_number == FINAL_SN) {
