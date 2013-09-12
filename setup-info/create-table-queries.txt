@@ -95,7 +95,7 @@ CREATE TABLE  `<db-name>`.  `publisher_summary` (
   `iteration` int(10) unsigned NOT NULL,
   `start_date` datetime(6) DEFAULT NULL,
   `end_date` datetime(6) DEFAULT NULL,
-  `num_publishers` tinyint(3) unsigned DEFAULT NULL,
+  `num_publishers` int(10) unsigned DEFAULT NULL,
   `message_size` int(10) unsigned DEFAULT NULL,
   `total_messages_sent` int(10) unsigned DEFAULT NULL,
   `tput_msg_per_sec` int(10) unsigned DEFAULT NULL,
@@ -189,7 +189,7 @@ CREATE TABLE  `<db-name>`.`subscriber_summary` (
   `iteration` int(10) unsigned NOT NULL,
   `start_date` datetime(6) NOT NULL,
   `end_date` datetime(6) NOT NULL,
-  `num_subscribers` tinyint(3) unsigned DEFAULT NULL,
+  `num_subscribers` int(10) unsigned DEFAULT NULL,
   `total_messages_recd` int(10) unsigned DEFAULT NULL,
   `tput_msg_per_sec` int(10) unsigned DEFAULT NULL,
   `total_mb_recd` int(10) unsigned DEFAULT NULL,
@@ -199,6 +199,77 @@ CREATE TABLE  `<db-name>`.`subscriber_summary` (
   `task_name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=904 DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `<db-name>`.`broker_cpu_statistics`;
+CREATE TABLE  `<db-name>`.`broker_cpu_statistics` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(50) NOT NULL,
+  `time` time NOT NULL,
+  `PID` int(10) unsigned NOT NULL,
+  `puser` double(24,10) NOT NULL DEFAULT '0.0000000000',
+  `psystem` double(14,3) NOT NULL DEFAULT '0.000',
+  `pguest` double(14,3) NOT NULL DEFAULT '0.000',
+  `pcpu` double(14,3) DEFAULT '0.000',
+  `cpu` int(10) NOT NULL,
+  `command` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`,`PID`)
+) ENGINE=InnoDB AUTO_INCREMENT=18993 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `<db-name>`.`broker_disk_statistics`;
+CREATE TABLE  `<db-name>`.`broker_disk_statistics` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(50) NOT NULL,
+  `time` time NOT NULL DEFAULT '00:00:00',
+  `PID` bigint(10) unsigned NOT NULL,
+  `kb_reads_ps` double(14,3) NOT NULL DEFAULT '0.000',
+  `kb_writes_ps` double(14,3) NOT NULL DEFAULT '0.000',
+  `kb_writes_canceled_ps` double(14,3) NOT NULL DEFAULT '0.000',
+  `command` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`,`PID`)
+) ENGINE=InnoDB AUTO_INCREMENT=18173 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `<db-name>`.`broker_heap_statistics`;
+CREATE TABLE  `<db-name>`.`broker_heap_statistics` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(50) NOT NULL,
+  `time` time NOT NULL,
+  `PID` int(10) unsigned NOT NULL,
+  `heap_current_KB` bigint(20) unsigned NOT NULL,
+  `heap_max_KB` bigint(20) unsigned NOT NULL,
+  `heap_ratio_prcnt` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`PID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2024 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `<db-name>`.`broker_memory_statistics`;
+CREATE TABLE  `<db-name>`.`broker_memory_statistics` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(50) NOT NULL,
+  `time` time NOT NULL DEFAULT '00:00:00',
+  `PID` bigint(10) unsigned NOT NULL,
+  `min_flts` double(14,3) NOT NULL DEFAULT '0.000',
+  `maj_flts` double(14,3) NOT NULL DEFAULT '0.000',
+  `virtual_size` double(14,3) NOT NULL DEFAULT '0.000',
+  `RSS` double(14,3) DEFAULT '0.000',
+  `pmem` double(14,3) NOT NULL DEFAULT '0.000',
+  `command` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`,`PID`)
+) ENGINE=InnoDB AUTO_INCREMENT=18568 DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `<db-name>`.`broker_network_statistics`;
+CREATE TABLE  `<db-name>`.`broker_network_statistics` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(50) NOT NULL,
+  `time` time NOT NULL,
+  `Interface` varchar(50) NOT NULL,
+  `kb_ps_recv` double(14,3) DEFAULT '0.000',
+  `kb_ps_written` double(14,3) NOT NULL DEFAULT '0.000',
+  `pk_ps_recv` double(14,3) NOT NULL DEFAULT '0.000',
+  `pk_ps_written` double(14,3) NOT NULL DEFAULT '0.000',
+  `putil` double(14,3) NOT NULL DEFAULT '0.000',
+  `error_ps` double(14,3) NOT NULL DEFAULT '0.000',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=57536 DEFAULT CHARSET=latin1;
 
 
 

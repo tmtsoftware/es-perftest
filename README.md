@@ -79,4 +79,21 @@ Instructions to Build from source on GitHub--
 	
 	* The "mbsuite/ext-lib" dir contains external jars which are required to run the messaging API specific test.
 	
+	* Download "hornetq-2.3.0.Final-bin.tar.gz" from download link provided in "setup-info/prerequisite.txt".
+	
+	* After download create the hornetq broker setup directory & copy the "hornetq-2.3.0.Final-bin.tar.gz" into it.
+		e.g
+			cd /root
+			mkdir hornetq-setup
+			cd /hornetq-setup
+		- Then copy "hornetq-2.3.0.Final-bin.tar.gz" into /root/hornetq-setup	
+			cp -avr hornetq-2.3.0.Final-bin.tar.gz /root/hornetq-setup/
+		- Extarct the hornetq-2.3.0.Final-bin.tar.gz	
+			tar -zxvf  hornetq-2.3.0.Final-bin.tar.gz
+			
+	* We alos provide "hornetq-configuration.xml" file in "es-perftest/setup-info" , copy the "hornetq-configuration.xml" into 
+	  "/root/hornet-setup/hornetq-2.3.0.Final/config/stand-alone/non-clustered/ directory"
+		
+	* For more information on hornetq refer the " User manual for hornetq.pdf " in "es-perftest/setup-info"
+	
 

@@ -1,0 +1,1082 @@
+<!-- Replace 127.0.0.1  with your broker machine Ip-address -->
+<configuration xmlns="urn:hornetq"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="urn:hornetq /schema/hornetq-configuration.xsd">
+
+   <paging-directory>${data.dir:../data}/paging</paging-directory>
+   
+   <bindings-directory>${data.dir:../data}/bindings</bindings-directory>
+   
+   <journal-directory>${data.dir:../data}/journal</journal-directory>
+   
+   <journal-min-files>10</journal-min-files>
+   
+   <large-messages-directory>${data.dir:../data}/large-messages</large-messages-directory>
+   
+   <connectors>
+      <connector name="netty">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyConnectorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="${hornetq.remoting.netty.port:5445}"/>
+      </connector>
+   </connectors>
+
+
+   <acceptors>
+
+      <acceptor name="netty-1">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5445"/>
+	  <param key="use-nio"  value="false"/>
+	  <param key="direct-deliver" value="false"/>	
+	  <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	</acceptor>
+
+
+	 <acceptor name="netty-2">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5446"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+
+	 <acceptor name="netty-3">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5447"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+	 <acceptor name="netty-4">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5448"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	 <acceptor name="netty-5">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5449"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-6">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5450"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-7">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5451"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-8">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5452"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-9">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5452"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-10">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5453"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-11">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5454"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-12">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5455"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-13">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5456"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-14">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5457"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-15">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5458"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-16">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5459"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+      <acceptor name="netty-17">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5460"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>	
+	</acceptor>
+
+
+	 <acceptor name="netty-18">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5461"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+
+	 <acceptor name="netty-19">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5462"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+	 <acceptor name="netty-20">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5463"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	 <acceptor name="netty-21">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5464"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-22">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5465"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+
+	<acceptor name="netty-23">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5467"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-24">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5468"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-25">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5469"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-26">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5470"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-27">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5471"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-28">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5472"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-29">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5473"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-30">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5474"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-31">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5475"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-32">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5476"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+      <acceptor name="netty-33">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5477"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>	
+	</acceptor>
+
+
+	 <acceptor name="netty-34">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5478"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+
+	 <acceptor name="netty-35">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5479"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+	 <acceptor name="netty-36">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5480"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	 <acceptor name="netty-37">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5481"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-38">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5482"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-40">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5483"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-40">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5484"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-41">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5485"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-42">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5486"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-40">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5487"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-44">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5488"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-45">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5489"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-46">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5490"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-47">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5491"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-48">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5492"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+      <acceptor name="netty-49">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5493"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>	
+	</acceptor>
+
+
+	 <acceptor name="netty-50">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5494"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+
+	 <acceptor name="netty-51">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5495"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+	 <acceptor name="netty-52">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5496"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	 <acceptor name="netty-53">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5497"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-54">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5498"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-55">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5499"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-56">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5500"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-57">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5501"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-58">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5502"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-59">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5503"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-60">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5504"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-61">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5505"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-62">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5506"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-63">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5507"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-64">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5508"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+      <acceptor name="netty-65">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5509"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>	
+	</acceptor>
+
+
+	 <acceptor name="netty-66">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5510"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+
+	 <acceptor name="netty-67">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5511"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+	 <acceptor name="netty-68">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5512"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	 <acceptor name="netty-69">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5513"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-70">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5514"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-71">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5515"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-72">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5516"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-73">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5517"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-74">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5518"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-75">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5519"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-76">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5520"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-77">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5521"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-78">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5522"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-79">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5523"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-80">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5524"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+      <acceptor name="netty-81">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5525"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>	
+	</acceptor>
+
+
+	 <acceptor name="netty-82">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5526"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+
+	 <acceptor name="netty-83">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5527"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+	 <acceptor name="netty-84">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5528"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	 <acceptor name="netty-85">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5529"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-86">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5530"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-87">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5531"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-88">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5532"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-89">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5533"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-90">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5534"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-91">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5535"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-92">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5536"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-93">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5537"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-94">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5538"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-95">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5539"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-96">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5540"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+      <acceptor name="netty-97">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5541"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>	
+	</acceptor>
+
+
+	 <acceptor name="netty-98">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5542"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+
+	 <acceptor name="netty-99">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5543"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/>
+	</acceptor>
+
+	 <acceptor name="netty-100">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5544"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+
+	<acceptor name="netty-101">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="127.0.0.1"/>
+         <param key="port"  value="5466"/>
+	  <param key="use-nio"  value="false"/>
+         <param key="tcp-send-buffer-size" value="300000000"/>
+         <param key="tcp-receive-buffer-size" value="300000000"/>
+	  <param key="direct-deliver" value="false"/> 
+	</acceptor>
+</acceptors>
+
+   <security-enabled>false</security-enabled>
+   <persistence-enabled>false</persistence-enabled>
+   <journal-type>ASYNCIO</journal-type>
+   <log-journal-write-rate>false</log-journal-write-rate>
+   <run-sync-speed-test>false</run-sync-speed-test>
+   <journal-sync-non-transactional>false</journal-sync-non-transactional>
+   <journal-sync-transactional>false</journal-sync-transactional>
+
+	<queues>
+		<queue name="hornetQueue">
+			<address>hornetq-topic0</address>
+		</queue>
+ 	</queues>
+
+
+   <address-settings>
+      <!--default for catch all-->
+      <address-setting match="#">
+         <dead-letter-address>jms.queue.DLQ</dead-letter-address>
+         <expiry-address>jms.queue.ExpiryQueue</expiry-address>
+         <redelivery-delay>0</redelivery-delay>
+         <max-size-bytes>-1</max-size-bytes>       
+	  <page-size-bytes>10485760</page-size-bytes>         
+	  <message-counter-history-day-limit>10</message-counter-history-day-limit>
+         <address-full-policy>PAGE</address-full-policy>
+      </address-setting>
+   </address-settings>
+
+</configuration>
+
