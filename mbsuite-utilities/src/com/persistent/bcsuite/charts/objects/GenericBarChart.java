@@ -8,8 +8,15 @@ import java.util.Map;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.RectangleEdge;
 
 import com.persistent.bcsuite.charts.constants.BCSuiteConstants;
 import com.persistent.bcsuite.charts.utils.MySqlDAO;
@@ -35,7 +42,15 @@ public class GenericBarChart implements Graph {
       DefaultCategoryDataset dataset = createDataset();
       JFreeChart chart = ChartFactory.createBarChart(
                title, xLabel,yLabel,
-               dataset, PlotOrientation.VERTICAL, false, true, false);
+               dataset, PlotOrientation.VERTICAL, true, true, false);
+      final CategoryPlot plot = chart.getCategoryPlot();
+      final CategoryAxis domainAxis = plot.getDomainAxis();
+      domainAxis.setCategoryLabelPositions(
+          CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 5.0));
+      CategoryItemRenderer renderer = plot.getRenderer();
+      ((BarRenderer)(renderer)).setItemMargin(0.0);
+      LegendTitle legend = chart.getLegend();
+      legend.setPosition(RectangleEdge.RIGHT);
       ChartUtilities.saveChartAsPNG(getFile(), chart,
             BCSuiteConstants.CHART_WIDTH, BCSuiteConstants.CHART_HEIGHT);
    }
@@ -50,11 +65,11 @@ public class GenericBarChart implements Graph {
          yLabel = (String)data.get("yLabel");
          tableVal = (double[][])data.get("data");
          
-        DefaultCategoryDataset d = new DefaultCategoryDataset();
+         DefaultCategoryDataset d = new DefaultCategoryDataset();
          
          for (int i = 0; i < tableVal.length; i++) {
             int j = 0;
-            d.setValue(tableVal[i][j++],yLabel,String.valueOf(tableVal[i][j]));
+            d.setValue(tableVal[i][j+1],yLabel,String.valueOf(tableVal[i][j]));
          }        
          dao.cleanUp();
          return d;

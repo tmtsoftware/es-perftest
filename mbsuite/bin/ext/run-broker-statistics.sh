@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #load the parameters to run the specific test from  config/publisher-config.properties 
-. config/subscriber-config.properties 
+. config/broker-config.properties 
 
 #parameter for broker
 MIN=$1
@@ -39,7 +39,7 @@ token=$6-$j
 
 
 	#get the PID of broker process
-	brokerPid=`ps -ef | grep HornetQBootstrapServer| grep -v grep | awk '{print $2}'`
+	brokerPid=`ps -ef | grep $broker| grep -v grep | awk '{print $2}'`
 
 	#calls the CPU statistics script with required parameter & dump data to "log/" dir
 	./run-cpu-statistics.sh $brokerPid $token $interval  broker-cpu $((shutdownDelay+5)) >> logs/broker-cpu.log &
