@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <publisher-settings>
 	<publisher-groups>
+<group name="mrgconfig">
+			<run-for-secs>@runSec</run-for-secs>
+			<total-publishers>@maxPublisher</total-publishers>
+			<load-dist-strategy>balanced</load-dist-strategy>
+			<message-size>@msgSize</message-size>
+			<dump-details>@dumpDetails</dump-details>
+			<num-topics>@maxTopics</num-topics>
+			<iteration-type>hot</iteration-type>
+			<iteration-drain-time-in-ms>100</iteration-drain-time-in-ms>
+			<iteration-to-ignore>0</iteration-to-ignore>
+                        <attributes>                                
+								<attribute>
+                                        <key>brokerhost</key>
+                                        <value>127.0.0.1</value>
+                                </attribute>
+								<attribute>
+                                        <key>brokerport</key>
+                                        <value>5672</value>
+                                </attribute>
+								<attribute>
+                                        <key>latencyCaptureWindow</key>
+                                        <value>100</value>
+                                </attribute>
+								<attribute>
+										<key>throttlingFactor</key>
+                                        <value>100</value>
+								</attribute>	
+                        </attributes>
+		</group>
 		<group name="hornetqtest">
 			<run-for-secs>@runSec</run-for-secs>
 			<total-publishers>@maxPublisher</total-publishers>
@@ -51,6 +80,7 @@
 			</attributes>
 		</group>
 
+
 		
 		<group name="rticonfig">
 			<run-for-secs>@runSec</run-for-secs>
@@ -96,6 +126,14 @@
 		</group>
 	</publisher-groups>
 	<tasks>
+		<task>
+			<key>mrg</key>
+			<clazz>org.tmt.addons.mrg.MRGTopicProducer</clazz>
+		</task>
+		<task>
+             <key>mrglat</key>
+            <clazz>org.tmt.addons.mrg.MRGLatencyTopicPub</clazz>
+        </task>
 		<task>
 			<key>hornetq</key>
 			<clazz>org.tmt.addons.hornetq.throughput.HornetqPublisher</clazz>

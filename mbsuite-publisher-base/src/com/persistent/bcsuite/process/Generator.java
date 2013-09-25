@@ -295,8 +295,9 @@ public class Generator extends BaseGenerator {
          }
          logger.info("No subscriber summary record yet for token ["+instanceToken +"], waiting for subscriber program to add it");
          try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
          } catch (InterruptedException e) {
+            logger.error("verifySubscriberCompletion interrupted.. breaking out");
          }
       }
    }

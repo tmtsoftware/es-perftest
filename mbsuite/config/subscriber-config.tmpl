@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <subscriber-settings>
 	<subscriber-groups>
+	<group name="mrgconfig">
+			<subscriber-shutdown-after-secs>@shutdownDelay</subscriber-shutdown-after-secs>
+			<total-subscribers>@maxSubscriber</total-subscribers>
+			<subscriber-distribution>balanced</subscriber-distribution>
+			<dump-details>@dumpDetails</dump-details>
+			<num-topics>@maxTopics</num-topics>
+			<topic-attributes>
+              <attribute>
+                                        <key>brokerhost</key>
+                                        <value>127.0.0.1</value>
+                                </attribute>
+								<attribute>
+                                        <key>brokerport</key>
+                                        <value>5672</value>
+                                </attribute>
+			</topic-attributes>			
+		</group>
 		<group name="hornetqtest">
 			<subscriber-shutdown-after-secs>@shutdownDelay</subscriber-shutdown-after-secs>
 			<total-subscribers>@maxSubscriber</total-subscribers>
@@ -10,7 +27,7 @@
 			<topic-attributes>				
 						<attribute>
 							<key>host-ip</key>
-							<value>127.0.0.1</value>
+							<value>10.88.203.40</value>
 						</attribute>
 						<attribute>
 							<key>host-port</key>
@@ -35,7 +52,7 @@
 						<attribute>
 							<key>use-port</key>
 							<value>true</value>
-						</attribute>					
+						</attribute>						
 			</topic-attributes>			
 		</group>
 
@@ -62,6 +79,12 @@
 		</group>
 	</subscriber-groups>
 	<tasks>
+	<task>
+			<key>mrg</key>
+			<clazz>org.tmt.addons.mrg.MRGTopicReceiver</clazz>
+		</task>
+
+	
 		<task>
 			<key>hornetq</key>
 			<clazz>org.tmt.addons.hornetq.throughput.HornetqSubscriber</clazz>
