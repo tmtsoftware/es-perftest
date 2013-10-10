@@ -175,7 +175,6 @@ public class HornetqPublisher extends PublisherBase {
 	@Override
 	public void sendMessageForLatency(byte[] message) {
 	}
-
 	/**
 	 * Close producer,session,factory & serverLocator
 	 */

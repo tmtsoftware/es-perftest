@@ -48,7 +48,6 @@ public class HornetqSubscriber extends SubscriberBase {
 		 */
 		address = attributes.get("topic");
 		logger.info("Topic Name from suite [" + address + "]");
-
 		/*
 		 * serverHost is the ip-address & serverPort is the port for Hornetq
 		 * Subscriber to connect, if usePort is "true" then for multi pub-sub
