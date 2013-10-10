@@ -36,21 +36,16 @@ public class HornetqSubscriber extends SubscriberBase {
 	private ServerLocator serverLocator;
 	private static int counter = 0;
 	private static int sPort;
-	private static ServerLocator statServerLocator;
-	private static ClientSessionFactory statFactory;
-	private static ClientSession statSession;
 	Map<String, Object> params = new HashMap<String, Object>();
 
 	@Override
 	public void init(Map<String, String> attributes) {
 		logger.info("HornetqSubscriber Initializing");
-
 		/*
 		 * In case of Hornetq it needs Address-Queue pair in order to publish
 		 * message on address and receive message from queue, where as queue is
 		 * bind to an address.Here address is used as a topic.
 		 */
-
 		address = attributes.get("topic");
 		logger.info("Topic Name from suite [" + address + "]");
 
@@ -71,14 +66,12 @@ public class HornetqSubscriber extends SubscriberBase {
 
 		// All of bellowing parameters are useful for Subscriber performance
 		// tuning.
-
 		tcpBuffer = attributes.get("tcp-buffer");
 		tcpNoDelay = attributes.get("tcp-no-delay");
 		useNio = attributes.get("use-nio");
 		preAck = attributes.get("pre-ack");
 
 		// After setting of all parameters they are added in Map "params".
-
 		params.put(TransportConstants.TCP_NODELAY_PROPNAME, tcpNoDelay);
 		params.put(TransportConstants.TCP_SENDBUFFER_SIZE_PROPNAME, tcpBuffer);
 		params.put(TransportConstants.TCP_RECEIVEBUFFER_SIZE_PROPNAME,
@@ -100,48 +93,18 @@ public class HornetqSubscriber extends SubscriberBase {
 		serverLocator.setPreAcknowledge(Boolean.parseBoolean(preAck));
 		serverLocator.setConsumerWindowSize(-1);
 
-		if (usePort.equalsIgnoreCase("false")) {
-			if (statServerLocator == null) {
-				statServerLocator = HornetQClient
-						.createServerLocatorWithoutHA(new TransportConfiguration(
-								NettyConnectorFactory.class.getName(), params));
-				statServerLocator.setPreAcknowledge(Boolean
-						.parseBoolean(preAck));
-				statServerLocator.setConsumerWindowSize(-1);
-			}
-
-		}
-
 		/*
 		 * Here consumer is created with queue & it is bind to and address/topic
 		 * for message receiving.
 		 */
 
 		try {
-
 			factory = serverLocator.createSessionFactory();
 			session = factory.createSession();
-			if (usePort.equalsIgnoreCase("false")) {
-				if(statFactory==null)
-				statFactory = statServerLocator.createSessionFactory();
-				if(statSession==null)
-				statSession = statFactory.createSession();
-			}
-
-			// Creates a random queue for all consumer threads.
 			String s = queueName + "_" + UUID.randomUUID().toString();
 			logger.info("Created random queue = " + s);
-			
-			if(usePort.equalsIgnoreCase("true")) {
 			session.createTemporaryQueue(address, s);
 			consumer = session.createConsumer(s);
-			}
-			if (usePort.equalsIgnoreCase("false")) {
-				statSession.createTemporaryQueue(address, s);
-				consumer = statSession.createConsumer(s);
-			}
-			
-			
 		} catch (Exception e) {
 			logger.info("init() Exception");
 			e.printStackTrace();
@@ -155,17 +118,11 @@ public class HornetqSubscriber extends SubscriberBase {
 	 */
 	@Override
 	public void read() {
-
 		// Send the message
 		// Return back the messageId of the message
 		// Dont do any other logic in this method.
 		try {
-			// Receive a byte[] message using byteProperty
-			if (usePort.equalsIgnoreCase("true")) 
-			session.start();	
-			if (usePort.equalsIgnoreCase("false")) 
-			statSession.start();
-			
+			session.start();
 			logger.info("READY!!!");
 			while (!consumer.isClosed()) {
 				msg = consumer.receive();
@@ -194,21 +151,14 @@ public class HornetqSubscriber extends SubscriberBase {
 	 */
 	@Override
 	public void shutdown() {
-		// TODO Auto-generated method stub
 		try {
 			counter--;
 			consumer.close();
-			session.close();
-			serverLocator.close();
-			factory.close();
-			if (usePort.equalsIgnoreCase("false")) {
-				if(counter==0){
-					statSession.close();
-					statServerLocator.close();
-					statFactory.close();
-				}
+			if (counter == 0) {
+				session.close();
+				factory.close();
+				serverLocator.close();
 			}
-
 			logger.info("Subscriber closed");
 		} catch (Exception e) {
 			// TODO: handle exception

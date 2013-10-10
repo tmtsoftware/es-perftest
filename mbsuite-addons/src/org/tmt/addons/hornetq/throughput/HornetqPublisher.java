@@ -33,11 +33,6 @@ public class HornetqPublisher extends PublisherBase {
 	private ClientMessage msg;
 	private String preAck;
 	private ServerLocator serverLocator;
-
-	private static ServerLocator statServerLocator;
-	private static ClientSessionFactory statFactory;
-	private static ClientSession statSession;
-
 	private static int counter = 0;
 	private String usePort;
 	private static int sPort;
@@ -59,18 +54,15 @@ public class HornetqPublisher extends PublisherBase {
 
 		address = attributes.get("topic");
 		logger.info("Topic Name from suite [" + address + "]");
-
 		/*
 		 * serverHost is the ip-address & serverPort is the port for Hornetq
 		 * Publisher to connect, if usePort is "true" then for multi pub-sub
 		 * mode all Publishers are going to connect to different port & if it is
 		 * "false" then all threads are connected to single port.
 		 */
-
 		serverHost = attributes.get("host-ip");
 		serverPort = attributes.get("host-port");
 		usePort = attributes.get("use-port");
-
 		if (usePort.equalsIgnoreCase("true")) {
 			sPort = Integer.parseInt(serverPort);
 			serverPort = String.valueOf(sPort + counter);
@@ -78,7 +70,6 @@ public class HornetqPublisher extends PublisherBase {
 
 		// All of bellowing parameters are useful for Publisher performance
 		// tuning.
-
 		tcpBuffer = attributes.get("tcp-buffer");
 		tcpNoDelay = attributes.get("tcp-no-delay");
 		preAck = attributes.get("pre-ack");
@@ -86,16 +77,13 @@ public class HornetqPublisher extends PublisherBase {
 		producerRate = attributes.get("producer-rate");
 
 		// After setting of all parameters they are added in Map "params".
-
 		params.put(TransportConstants.TCP_NODELAY_PROPNAME, tcpNoDelay);
 		params.put(TransportConstants.TCP_SENDBUFFER_SIZE_PROPNAME, tcpBuffer);
 		params.put(TransportConstants.TCP_RECEIVEBUFFER_SIZE_PROPNAME,
 				tcpBuffer);
 		params.put(TransportConstants.USE_NIO_PROP_NAME, useNio);
-
-		logger.info("Publisher connecting to server at IP [" + serverHost
+		logger.info("Subscriber connecting to server at IP [" + serverHost
 				+ "] and port [" + serverPort + "]");
-
 		params.put(TransportConstants.HOST_PROP_NAME, serverHost);
 		params.put(TransportConstants.PORT_PROP_NAME, serverPort);
 
@@ -103,36 +91,21 @@ public class HornetqPublisher extends PublisherBase {
 		 * Configure the Map with Hornetq server TransportConfiguration and set
 		 * it using serverLocator.
 		 */
-
 		serverLocator = HornetQClient
 				.createServerLocatorWithoutHA(new TransportConfiguration(
 						NettyConnectorFactory.class.getName(), params));
 		serverLocator.setUseGlobalPools(false);
 		serverLocator.setScheduledThreadPoolMaxSize(24);
+		serverLocator.setThreadPoolMaxSize(-1);
 		serverLocator.setPreAcknowledge(Boolean.parseBoolean(preAck));
 		serverLocator.setProducerMaxRate(Integer.parseInt(producerRate));
 		serverLocator.setProducerWindowSize(31457280);
 		serverLocator.setConfirmationWindowSize(1310720);
 
-		if (usePort.equalsIgnoreCase("false")) {
-
-			if (statServerLocator == null) {
-				statServerLocator = HornetQClient
-						.createServerLocatorWithoutHA(new TransportConfiguration(
-								NettyConnectorFactory.class.getName(), params));
-				statServerLocator.setUseGlobalPools(false);
-				statServerLocator.setScheduledThreadPoolMaxSize(24);
-				statServerLocator.setPreAcknowledge(Boolean
-						.parseBoolean(preAck));
-				statServerLocator.setProducerMaxRate(Integer
-						.parseInt(producerRate));
-				statServerLocator.setProducerWindowSize(31457280);
-				statServerLocator.setConfirmationWindowSize(1310720);
-			}
-		}
+		// serverLocator.setProducerWindowSize(31457280);
+		// serverLocator.setConfirmationWindowSize(1310720);
 
 		initializeMessagePlatform();
-
 		logger.info("Sample Publisher initialization complete...");
 	}
 
@@ -141,28 +114,21 @@ public class HornetqPublisher extends PublisherBase {
 	 */
 
 	private void initializeMessagePlatform() {
-
 		/*
 		 * Here producer is created using session & it is bind to and
 		 * address/topic for message sending.
 		 */
-
 		try {
 
-			if (usePort.equalsIgnoreCase("false")) {
-				if (statFactory == null)
-					statFactory = statServerLocator.createSessionFactory();
-				if (statSession == null)
-					statSession = statFactory.createSession();
-				producer = statSession.createProducer(address);
-			}
 			factory = serverLocator.createSessionFactory();
 			session = factory.createSession();
 			producer = session.createProducer(address);
 		} catch (HornetQException e) {
+			// TODO Auto-generated catch block
 			logger.info("init() Exception");
 			e.printStackTrace();
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		logger.info("HornetqPublisher inited");
@@ -177,26 +143,16 @@ public class HornetqPublisher extends PublisherBase {
 	/**
 	 * Sends messages to an address/topic.
 	 */
-
 	@Override
 	public void sendMessageForThroughput(byte[] message) {
-
+		// TODO Auto-generated method stub
 		logger.info("sendMessageForThroughput started.");
-
 		setStartTime(new Date());
 		try {
 			while (canContinue) {
 				// send messages till the suite does not tell you to shutdown
-
 				// Sends a byte[] message using byteProperty
-				if (usePort.equalsIgnoreCase("true")) {
-					msg = session.createMessage(false);	
-				}
-				
-				if (usePort.equalsIgnoreCase("false")) {
-				msg = statSession.createMessage(false);
-				}
-				
+				msg = session.createMessage(false);
 				msg.putBytesProperty("prop", message);
 				producer.send(msg);
 				// add data to statistics pool. This will count the number of
@@ -229,20 +185,14 @@ public class HornetqPublisher extends PublisherBase {
 		try {
 			counter--;
 			producer.close();
-			session.close();
-			factory.close();
-			serverLocator.close();
-			if (usePort.equalsIgnoreCase("false")) {
-				if(counter==0)
-				{
-				statSession.close();
-				statFactory.close();
-				statServerLocator.close();
-				}
-
+			if (counter == 0) {
+				session.close();
+				factory.close();
+				serverLocator.close();
 			}
 			logger.info("Publisher closed");
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			logger.info("cleanup() Exception");
 			e.printStackTrace();
 		}
