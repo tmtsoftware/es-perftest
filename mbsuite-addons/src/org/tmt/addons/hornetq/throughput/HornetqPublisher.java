@@ -145,7 +145,6 @@ public class HornetqPublisher extends PublisherBase {
 	 */
 	@Override
 	public void sendMessageForThroughput(byte[] message) {
-		// TODO Auto-generated method stub
 		logger.info("sendMessageForThroughput started.");
 		setStartTime(new Date());
 		try {
