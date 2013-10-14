@@ -378,6 +378,7 @@ public class RTIQosHelper {
 		data_reader_qos.reader_resource_limits.max_samples_per_remote_writer = data_reader_qos.resource_limits.max_samples_per_instance;
 		data_reader_qos.resource_limits.max_samples = data_reader_qos.resource_limits.max_samples_per_instance;
 		data_reader_qos.resource_limits.initial_samples = data_reader_qos.resource_limits.max_samples_per_instance;
+//		data_reader_qos.reader_resource_limits.max_remote_writers = 1024;
 
 		// Unless specified, we will use best effort for this test so...
 		if (isReliable) {

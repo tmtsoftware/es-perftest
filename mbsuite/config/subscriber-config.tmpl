@@ -1,61 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <subscriber-settings>
 	<subscriber-groups>
-	<group name="mrgconfig">
-			<subscriber-shutdown-after-secs>@shutdownDelay</subscriber-shutdown-after-secs>
-			<total-subscribers>@maxSubscriber</total-subscribers>
-			<subscriber-distribution>balanced</subscriber-distribution>
-			<dump-details>@dumpDetails</dump-details>
-			<num-topics>@maxTopics</num-topics>
-			<topic-attributes>
-              <attribute>
-                                        <key>brokerhost</key>
-                                        <value>127.0.0.1</value>
-                                </attribute>
-								<attribute>
-                                        <key>brokerport</key>
-                                        <value>5672</value>
-                                </attribute>
-			</topic-attributes>			
-		</group>
-		<group name="hornetqtest">
-			<subscriber-shutdown-after-secs>@shutdownDelay</subscriber-shutdown-after-secs>
-			<total-subscribers>@maxSubscriber</total-subscribers>
-			<subscriber-distribution>balanced</subscriber-distribution>
-			<dump-details>@dumpDetails</dump-details>
-			<num-topics>@maxTopics</num-topics>
-			<topic-attributes>				
-						<attribute>
-							<key>host-ip</key>
-							<value>10.88.203.40</value>
-						</attribute>
-						<attribute>
-							<key>host-port</key>
-							<value>5445</value>
-						</attribute>
-						<attribute>
-							<key>tcp-buffer</key>
-							<value>300000000</value>
-						</attribute>
-						<attribute>
-							<key>tcp-no-delay</key>
-							<value>false</value>
-						</attribute>
-						<attribute>
-							<key>pre-ack</key>
-							<value>true</value>
-						</attribute>
-						<attribute>
-							<key>use-nio</key>
-							<value>false</value>
-						</attribute>
-						<attribute>
-							<key>use-port</key>
-							<value>true</value>
-						</attribute>						
-			</topic-attributes>			
-		</group>
-
+	
 		<group name="rticonfig">
 			<subscriber-shutdown-after-secs>@shutdownDelay</subscriber-shutdown-after-secs>
 			<total-subscribers>@maxSubscriber</total-subscribers>
@@ -63,27 +9,119 @@
 			<dump-details>@dumpDetails</dump-details>
 			<num-topics>@maxTopics</num-topics>
 			<topic-attributes>
-                <attribute>
-					<key>maxObjectsPerThread</key>
-                    <value>10240</value>
-                </attribute>
-				<attribute>
-					<key>isReliable</key>
-                    <value>true</value>
-                </attribute>
-				<attribute>
-					<key>numOfDataReaders</key>
-                    <value>1</value>
-                </attribute>
+							<attribute>
+								<key>maxObjectsPerThread</key>
+								<value>10240</value>
+							</attribute>
+							<attribute>
+								<key>isReliable</key>
+								<value>true</value>
+							</attribute>
+							<attribute>
+								<key>numOfDataReaders</key>
+								<value>1</value>
+							</attribute>
+			</topic-attributes>			
+		</group>	
+		
+	<group name="hornetqtest">
+			<subscriber-shutdown-after-secs>@shutdownDelay</subscriber-shutdown-after-secs>
+			<total-subscribers>@maxSubscriber</total-subscribers>
+			<subscriber-distribution>balanced</subscriber-distribution>
+			<dump-details>@dumpDetails</dump-details>
+			<num-topics>@maxTopics</num-topics>
+			<topic-attributes>				
+							<attribute>
+								<key>host-ip</key>
+								<value>10.88.203.40</value>
+							</attribute>
+							<attribute>
+								<key>host-port</key>
+								<value>5445</value>
+							</attribute>
+							<attribute>
+								<key>tcp-buffer</key>
+								<value>300000000</value>
+							</attribute>
+							<attribute>
+								<key>tcp-no-delay</key>
+								<value>false</value>
+							</attribute>
+							<attribute>
+								<key>pre-ack</key>
+								<value>true</value>
+							</attribute>
+							<attribute>
+								<key>use-nio</key>
+								<value>false</value>
+							</attribute>
+							<attribute>
+								<key>use-port</key>
+								<value>true</value>
+							</attribute>						
+			</topic-attributes>			
+	</group>
+
+		
+		
+		<group name="mrgconfig">
+			<subscriber-shutdown-after-secs>@shutdownDelay</subscriber-shutdown-after-secs>
+			<total-subscribers>@maxSubscriber</total-subscribers>
+			<subscriber-distribution>balanced</subscriber-distribution>
+			<dump-details>@dumpDetails</dump-details>
+			<num-topics>@maxTopics</num-topics>
+			<topic-attributes>
+							<attribute>
+                                <key>brokerhost</key>
+                                <value>127.0.0.1</value>
+                            </attribute>
+							<attribute>
+                                <key>brokerport</key>
+                                <value>5672</value>
+                            </attribute>
 			</topic-attributes>			
 		</group>
+		
+		<group name="redistest">
+			<subscriber-shutdown-after-secs>@shutdownDelay</subscriber-shutdown-after-secs>
+			<total-subscribers>@maxSubscriber</total-subscribers>
+			<subscriber-distribution>balanced</subscriber-distribution>
+			<dump-details>@dumpDetails</dump-details>
+			<num-topics>@maxTopics</num-topics>
+			<topic-attributes>			
+							<attribute>
+								<key>host-ip</key>
+								<value>10.88.203.43</value>
+							</attribute>
+							<attribute>
+								<key>host-port</key>
+								<value>6379</value>
+							</attribute>
+							<!-- sleep-time is needed for reliability test -->
+									<!-- It indicates that after each sleep-time it dumps recv count into log file -->
+							<attribute>
+								<key>sleep-time</key>
+								<value>300000</value>
+							</attribute>
+			</topic-attributes>	
+	</group>
+	
+		
 	</subscriber-groups>
 	<tasks>
-	<task>
+	
+		<task>
+			<key>redis</key>
+			<clazz>org.tmt.addons.redis.throughput.RedisSubscriber</clazz>
+		</task>
+		<task>
+			<key>redis-rel</key>
+			<clazz>org.tmt.addons.redis.reliability.RedisSubReliabilityTest</clazz>
+		</task>	
+		<task>
 			<key>mrg</key>
 			<clazz>org.tmt.addons.mrg.MRGTopicReceiver</clazz>
 		</task>
-
 	
 		<task>
 			<key>hornetq</key>

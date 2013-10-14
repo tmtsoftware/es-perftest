@@ -2,6 +2,9 @@ package org.tmt.addons.rti;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.tmt.addons.rti.throughput.Throughput;
@@ -38,7 +41,8 @@ public class ThroughputPublisher extends PublisherBase {
 
 	/** RTI specific declarations start **/
 	private static DomainParticipantFactory factory = null;
-	private static DomainParticipant participant = null;
+	private DomainParticipant participant = null;
+	private static ArrayBlockingQueue<DomainParticipant> participants = new ArrayBlockingQueue<DomainParticipant>(100);
 
 	DomainParticipantFactoryQos factory_qos = null;
 	DomainParticipantQos participant_qos = null;
@@ -61,12 +65,15 @@ public class ThroughputPublisher extends PublisherBase {
 
 	/** Publisher program specific declarations start **/
 	private static int counter;
+	private static int participantid =0;
 	private int throttlingFactor = 100;
 	boolean isReliable = false;
 	boolean isAsynch = false;
 	String topicName = null;
 	private int maxObjectsPerThread = 1024;
 	private int numSubscribers = 0;
+
+	private boolean throttledTest =false;
 
 	/** Publisher program specific declarations start **/
 
@@ -103,6 +110,7 @@ public class ThroughputPublisher extends PublisherBase {
 		data_instance.data.clear();
 		data_instance.data.addAllByte(message);
 		while (canContinue()) {
+			if(!throttledTest){ 
 			try {
 				for (int l = 0; l < throttlingFactor && canContinue; l++, data_instance.sequence_number++) {
 					try {
@@ -122,14 +130,38 @@ public class ThroughputPublisher extends PublisherBase {
 				logger.error("Aborting Publisher -- Recieved exception during sending message. Exception is = "
 						+ ex);
 			}
+		}
+			else{
+				
+				try {
+					long beforeSend = System.currentTimeMillis();
+					for (int l = 0; l < throttlingFactor && canContinue; l++, data_instance.sequence_number++) {
+						try {
+							data_writer.write(data_instance, data_instanceHandle);
+							addToStatisticsPool(len);
+						} catch (RETCODE_TIMEOUT timeout) {
+							data_instance.sequence_number--;
+							exceptionCnt++;
+						}
+					}
+					long afterSend = System.currentTimeMillis();
+					long timeLeftInMillis = 100 - (afterSend - beforeSend);
+					if(timeLeftInMillis>0){
+						TimeUnit.MILLISECONDS.sleep(timeLeftInMillis);
+					}
+				} catch (Exception ex) {
+					logger.error("Aborting Publisher -- Recieved exception during sending message. Exception is = "
+							+ ex);
+				}
+			}
 
 		}
 		setEndTime(new Date());
 		logger.info("Sent [" + data_instance.sequence_number
 				+ "] , Exceptions [" + exceptionCnt + "]");
-		logger.info("Sleeping for 5 seconds");
+		logger.info("Sleeping for 10 seconds");
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		} finally {
@@ -165,6 +197,18 @@ public class ThroughputPublisher extends PublisherBase {
 			logger.error("Cannot parse throttling factor.. using default as 100");
 			throttlingFactor = 100;
 		}
+		
+		String tt = attributes.get("throttledTest");
+
+		try {
+			if(tt !=null ){
+			throttledTest = Boolean.parseBoolean(tt);
+			}
+		} catch (Exception e) {
+			logger.error("Cannot parse if test throttled.. using default as false");
+			throttledTest = false;
+		}
+		
 
 		String ns = attributes.get("numSubscribers");
 
@@ -224,16 +268,22 @@ public class ThroughputPublisher extends PublisherBase {
 			RTIQosHelper.configure_factory_qos(factory_qos, factory,
 					maxObjectsPerThread);
 		}
-
-		if (participant == null) {
+		try{
+		participant = participants.element();
+		}catch(NoSuchElementException e){
+			participant =null;
+		}
+		if (participant == null || counter%10 ==0 ) {
 			RTIQosHelper.configure_participant_qos(participant_qos, factory,
-					counter);
+					participantid);
 			// Now we can create the 'disabled' participant.
-			participant = factory.create_participant(88, participant_qos, null,
+			participant = factory.create_participant(0, participant_qos, null,
 					StatusKind.STATUS_MASK_NONE);
 			RTIQosHelper.configure_participant_transport(locator,
 					udpv4TransportProperty, participant);
+			participantid++;
 			participant.enable();
+			participants.offer(participant);
 		} else {
 			logger.info("Reusing participant");
 		}
@@ -282,7 +332,7 @@ public class ThroughputPublisher extends PublisherBase {
 				throw error;
 		}
 		/* set up user data */
-		data_instance = new Throughput();
+		data_instance = new Throughput(getMessageLength());
 
 		int samples_per_trigger = RTIQosHelper.configure_data_writer_qos(
 				data_writer_qos, large_data, max_gather_send_buffers,
@@ -364,18 +414,33 @@ public class ThroughputPublisher extends PublisherBase {
 
 		if (counter == 0) {
 			logger.info("Counter is zero, deleting participant instance now...");
-			if (participant != null) {
-				participant.delete_contained_entities();
-				DomainParticipantFactory.get_instance().delete_participant(
-						participant);
-				logger.info("Participant Deleted");
-				participant = null;
+			for(int i=0;i<participants.size();i++){
+				try {
+					DomainParticipant parti = participants.take();
+					if (parti != null) {
+						parti.delete_contained_entities();
+						DomainParticipantFactory.get_instance().delete_participant(
+								parti);
+						logger.info("Participant Deleted");
+						parti = null;
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+//			if (participant != null) {
+//				participant.delete_contained_entities();
+//				DomainParticipantFactory.get_instance().delete_participant(
+//						participant);
+//				logger.info("Participant Deleted");
+//				participant = null;
+//			}
 
-			logger.info("Counter is zero, clearing factory instance now...");
-			DomainParticipantFactory.finalize_instance();
-			factory = null;
-			logger.info("cleared factory instance");
+//			logger.info("Counter is zero, clearing factory instance now...");
+//			DomainParticipantFactory.finalize_instance();
+//			factory = null;
+//			logger.info("cleared factory instance");
 		} else {
 			logger.info("Counter is [" + counter
 					+ "],  not clearing factory instance");

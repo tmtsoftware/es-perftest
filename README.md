@@ -97,3 +97,21 @@ Instructions to Build from source on GitHub--
 	* For more information on hornetq refer the " User manual for hornetq.pdf " in "es-perftest/setup-info"
 	
 
+	* Download "redis-2.6.16.tar.gz" from download link provided in "setup-info/prerequisite.txt".
+	
+	* After download create the redis broker setup directory & copy the "redis-2.6.16.tar.gz" into it.
+		e.g
+			cd /root
+			mkdir redis-setup
+			cd /redis-setup
+		- Then copy "redis-2.6.16.tar.gz" into /root/redis-setup	
+			cp -avr redis-2.6.16.tar.gz /root/redis-setup/
+		- Extarct the redis-2.6.16.tar.gz
+			tar -zxvf  redis-2.6.16.tar.gz
+			
+	* We alos provide "redis.conf" file in "es-perftest/setup-info" , copy the "redis.conf" into 
+	  "/root/redis-setup/redis-2.6.16/ directory"
+		
+	* For more information on redis refer the " User manual for redis.pdf " in "es-perftest/setup-info"
+
+

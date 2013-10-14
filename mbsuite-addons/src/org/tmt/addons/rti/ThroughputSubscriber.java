@@ -2,6 +2,8 @@ package org.tmt.addons.rti;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.tmt.addons.rti.throughput.Throughput;
@@ -49,6 +51,7 @@ public class ThroughputSubscriber extends SubscriberBase {
 
 	// Participant is per thread
 	private DomainParticipant participant = null;
+	private static ArrayBlockingQueue<DomainParticipant> participants = new ArrayBlockingQueue<DomainParticipant>(100);
 	DomainParticipantFactoryQos factory_qos = null;
 	DomainParticipantQos participant_qos = null;
 	SubscriberQos subscriber_qos = null;
@@ -69,6 +72,7 @@ public class ThroughputSubscriber extends SubscriberBase {
 	/** Subscriber Program specific declarations **/
 
 	private static int counter; // Keeps track of how many subscriber threads.
+	private static int participantid=0;
 	private boolean isReliable = false;
 	private String topicName = null;
 	private int maxObjectsPerThread = 1024;
@@ -113,8 +117,8 @@ public class ThroughputSubscriber extends SubscriberBase {
 		logger.info("Using topic as [" + topicName + "]");
 
 		logger.info("In Read.. configuring all RTI objects");
+		
 		factory_qos = new DomainParticipantFactoryQos();
-
 		participant_qos = new DomainParticipantQos();
 		subscriber_qos = new SubscriberQos();
 
@@ -142,21 +146,28 @@ public class ThroughputSubscriber extends SubscriberBase {
 			RTIQosHelper.configure_factory_qos(factory_qos, factory,
 					maxObjectsPerThread);
 		}
-
-		if (participant == null) {
+		
+		try{
+		participant = participants.element();
+		}catch(NoSuchElementException e){
+			participant =null;
+		}
+		if (participant == null || counter % 10 == 0) {
 			/** Participant Setting Starts **/
 			RTIQosHelper.configure_participant_qos(participant_qos, factory,
-					counter + 1);
+					participantid);
 			// Now we can create the 'disabled' participant.
-			participant = factory.create_participant(88, participant_qos, null,
+			participant = factory.create_participant(0, participant_qos, null,
 					StatusKind.STATUS_MASK_NONE); // 88 some
 													// arbitrary
 													// //
 													// here.
 			RTIQosHelper.configure_participant_transport(locator,
 					udpv4TransportProperty, participant);
+			participantid++;
 			// Now enable the participant
 			participant.enable();
+			participants.offer(participant);
 			/** Participant Setting Ends **/
 		} else {
 			logger.info("Reusing participant");
@@ -245,19 +256,36 @@ public class ThroughputSubscriber extends SubscriberBase {
 		logger.info("Messages Recieved [" + data_listener.get_packetsReceived()
 				+ "], Lost [" + data_listener.get_packetsLost() + "]");
 		decrementCounter();
-
+//		participant.delete_datareader(this.data_reader);
+//		participant.delete_topic(this.data_topic);
+//		participant.delete_subscriber(this.subscriber);
 		if (counter == 0) {
 			logger.info("Counter is zero, deleting participant");
-			if (participant != null) {
+			for(int i=0;i<participants.size();i++){
 				try {
-					participant.delete_contained_entities();
-					DomainParticipantFactory.get_instance().delete_participant(
-							participant);
-				} catch (Exception e) {
+					DomainParticipant parti = participants.take();
+					if (parti != null) {
+						parti.delete_contained_entities();
+						DomainParticipantFactory.get_instance().delete_participant(
+								parti);
+						logger.info("Participant Deleted");
+						parti = null;
+					}
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				participant = null;
 			}
+//			if (participant != null) {
+//				try {
+//					participant.delete_contained_entities();
+//					DomainParticipantFactory.get_instance().delete_participant(
+//							participant);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//				participant = null;
+//			}
 			/*
 			 * logger.info("Counter is zero, clearing factory instance now...");
 			 * DomainParticipantFactory.finalize_instance(); factory = null;

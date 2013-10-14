@@ -45,3 +45,18 @@ prerequisite for running the test---
  * hornetq-2.3.0.Final
    --------------------
    // downloaded from  " http://downloads.jboss.org/hornetq/hornetq-2.3.0.Final-bin.tar.gz " 
+   
+  * redis 2.6.16
+   --------------------
+   // downloaded from  " http://download.redis.io/releases/redis-2.6.16.tar.gz "   
+
+* RTI Connext-DDS 5.0.0
+   --------------------
+   // downloaded  from  "http://www.rti.com/downloads/"
+
+* Redhat-MRG 6 
+   --------------------
+   // downloaded and installed from  "http://linux.web.cern.ch/linux/mrg/"
+
+
+

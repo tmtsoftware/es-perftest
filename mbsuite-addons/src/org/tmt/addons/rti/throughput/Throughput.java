@@ -23,7 +23,7 @@ public class Throughput implements Copyable, Serializable
     public ByteSeq data ;
 
     public Throughput() {
-    	data = new ByteSeq(((THROUGHPUT_TEST_PACKET_DATA_SIZE_MAX.VALUE)));
+    	data = new ByteSeq(1/*((THROUGHPUT_TEST_PACKET_DATA_SIZE_MAX.VALUE))*/);
     }
     public Throughput(int length) {
     	data = new ByteSeq(length);
