@@ -82,7 +82,7 @@ public class HornetqPublisher extends PublisherBase {
 		params.put(TransportConstants.TCP_RECEIVEBUFFER_SIZE_PROPNAME,
 				tcpBuffer);
 		params.put(TransportConstants.USE_NIO_PROP_NAME, useNio);
-		logger.info("Subscriber connecting to server at IP [" + serverHost
+		logger.info("Publisher connecting to server at IP [" + serverHost
 				+ "] and port [" + serverPort + "]");
 		params.put(TransportConstants.HOST_PROP_NAME, serverHost);
 		params.put(TransportConstants.PORT_PROP_NAME, serverPort);
