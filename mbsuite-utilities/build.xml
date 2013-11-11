@@ -70,6 +70,7 @@
 	</target>
 
 
+
 	<!--Creates the deployable jar file  -->
 	<target name="jar" depends="compile,copy">
     	<property name="version.num" value="1.0.0"/>

@@ -38,7 +38,7 @@ runForSec=$(( $totalRun * $shutdownDelay + 5 ))
  
 #run the extractor utility which actually receives the messages.
 #loads the external jars from "ext-lib" , utility jars from "lib" & configuration parameter from .tmpl file inside  "config" dir 
-   java -d64 -Xms4048M -Xmx14048M -cp  "../../ext-lib/*":"../../ext-lib/rti/*":"../../export/data-files/":"../../lib/mbsuite-addons.jar":"../../config/":"../../lib/mbsuite-subscriber-base.jar":"../../export/"    com.persistent.bcsuite.process.Extractor $key $groupName $token $iteration  >> logs/run-subscriber-latency-test.log &
+ java -d64 -XX:-UseGCOverheadLimit -Xms4048M -Xmx14048M -cp  "$OSPL_HOME/jar/dcpssaj.jar:../../ext-lib/*":"../../ext-lib/rti/*":"../../export/data-files/":"../../lib/mbsuite-addons.jar":"../../config/":"../../lib/mbsuite-subscriber-base.jar":"../../export/"    com.persistent.bcsuite.process.Extractor $key $groupName $token $iteration  >> logs/run-subscriber-latency-test.log &
  
 	#get the PID of extractor process
 	pid=$!

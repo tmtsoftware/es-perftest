@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/TMT-EventService-POC/!svn/ver/629/Phase%202/source/mbsuite-utilities/src/properties
+END
+publisher-network.properties
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/TMT-EventService-POC/!svn/ver/397/Phase%202/source/mbsuite-utilities/src/properties/publisher-network.properties
+END
+publisher-disk.properties
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/TMT-EventService-POC/!svn/ver/397/Phase%202/source/mbsuite-utilities/src/properties/publisher-disk.properties
+END
+collector.properties
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/TMT-EventService-POC/!svn/ver/629/Phase%202/source/mbsuite-utilities/src/properties/collector.properties
+END
+subscriber-cpu.properties
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/TMT-EventService-POC/!svn/ver/397/Phase%202/source/mbsuite-utilities/src/properties/subscriber-cpu.properties
+END
+queries.properties.old
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/TMT-EventService-POC/!svn/ver/479/Phase%202/source/mbsuite-utilities/src/properties/queries.properties.old
+END
+broker-memory.properties
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/TMT-EventService-POC/!svn/ver/580/Phase%202/source/mbsuite-utilities/src/properties/broker-memory.properties
+END
+subscriber-network.properties
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/TMT-EventService-POC/!svn/ver/397/Phase%202/source/mbsuite-utilities/src/properties/subscriber-network.properties
+END
+subscriber-disk.properties
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/TMT-EventService-POC/!svn/ver/397/Phase%202/source/mbsuite-utilities/src/properties/subscriber-disk.properties
+END
+broker-heap.properties
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/TMT-EventService-POC/!svn/ver/579/Phase%202/source/mbsuite-utilities/src/properties/broker-heap.properties
+END
+publisher-memory.properties
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/TMT-EventService-POC/!svn/ver/397/Phase%202/source/mbsuite-utilities/src/properties/publisher-memory.properties
+END
+publisher-heap.properties
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/TMT-EventService-POC/!svn/ver/425/Phase%202/source/mbsuite-utilities/src/properties/publisher-heap.properties
+END
+broker-cpu.properties
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/TMT-EventService-POC/!svn/ver/579/Phase%202/source/mbsuite-utilities/src/properties/broker-cpu.properties
+END
+subscriber-memory.properties
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/TMT-EventService-POC/!svn/ver/397/Phase%202/source/mbsuite-utilities/src/properties/subscriber-memory.properties
+END
+broker-network.properties
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/TMT-EventService-POC/!svn/ver/579/Phase%202/source/mbsuite-utilities/src/properties/broker-network.properties
+END
+broker-disk.properties
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/TMT-EventService-POC/!svn/ver/579/Phase%202/source/mbsuite-utilities/src/properties/broker-disk.properties
+END
+queries.properties
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/TMT-EventService-POC/!svn/ver/629/Phase%202/source/mbsuite-utilities/src/properties/queries.properties
+END
+subscriber-heap.properties
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/TMT-EventService-POC/!svn/ver/425/Phase%202/source/mbsuite-utilities/src/properties/subscriber-heap.properties
+END
+publisher-cpu.properties
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/TMT-EventService-POC/!svn/ver/397/Phase%202/source/mbsuite-utilities/src/properties/publisher-cpu.properties
+END

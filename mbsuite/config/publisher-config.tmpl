@@ -160,6 +160,46 @@
 								</attribute>
 					</attributes>
 	</group>
+
+	<group name="osplconfig">
+			<run-for-secs>@runSec</run-for-secs>
+			<total-publishers>@maxPublisher</total-publishers>
+			<load-dist-strategy>balanced</load-dist-strategy>
+			<message-size>@msgSize</message-size>
+			<dump-details>@dumpDetails</dump-details>
+			<num-topics>@maxTopics</num-topics>
+			<iteration-type>hot</iteration-type>
+			<iteration-drain-time-in-ms>100</iteration-drain-time-in-ms>
+			<iteration-to-ignore>0</iteration-to-ignore>
+                    <attributes>
+				                <attribute>
+			                        <key>throttlingFactor</key>
+                     			    <value>100000</value>
+			                    </attribute>
+								<attribute>
+			                        <key>throttle-gap</key>
+                     			    <value>2</value>
+			                    </attribute>
+								<attribute>
+			                        <key>latencyCaptureWindow</key>
+                     			    <value>1</value>
+			                    </attribute>
+					<!-- When you have more than one subscriber on a topic, then change this value
+								to indicate how many subscribers are on that topic. -->
+								<attribute>
+                       			    <key>numSubscribers</key>
+		                            <value>1</value>
+                  				</attribute>	
+						<!-- sleep-time is needed for reliability test -->
+								<attribute>
+									<key>sleep-time</key>
+									<value>300000</value>
+								</attribute>
+							
+                    </attributes>
+		</group>
+
+
 	
 	</publisher-groups>
 	<tasks>
@@ -210,6 +250,21 @@
 			<key>redis-rel</key>
 			<clazz>org.tmt.addons.redis.reliability.RedisPubReliabilityTest</clazz>
 		</task>
+
+		<task>
+			<key>osplice</key>
+			<clazz>org.tmt.addons.ospl.throughput.OpenSpliceDataPublisher</clazz>
+		</task>
+		<task>
+			<key>osplice-latency</key>
+			<clazz>org.tmt.addons.ospl.latency.OpenSpliceLatencyPub</clazz>
+		</task>
+		<task>
+			<key>osplice-rel</key>
+			<clazz>org.tmt.addons.ospl.reliability.OpenSplicePubReliability</clazz>
+		</task>
+
+
 		
 		
 	</tasks>

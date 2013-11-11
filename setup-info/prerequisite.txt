@@ -42,11 +42,11 @@ prerequisite for running the test---
  //service ip6tables stop  
  
  
- * hornetq-2.3.0.Final
+* hornetq-2.3.0.Final
    --------------------
    // downloaded from  " http://downloads.jboss.org/hornetq/hornetq-2.3.0.Final-bin.tar.gz " 
    
-  * redis 2.6.16
+* redis 2.6.16
    --------------------
    // downloaded from  " http://download.redis.io/releases/redis-2.6.16.tar.gz "   
 
@@ -58,5 +58,7 @@ prerequisite for running the test---
    --------------------
    // downloaded and installed from  "http://linux.web.cern.ch/linux/mrg/"
 
-
+* OpenSpliceDDS 
+   ---------------------
+   // downloaded and installed from "http://www.prismtech.com/download-documents/1374"
 

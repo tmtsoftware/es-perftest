@@ -79,6 +79,8 @@ Instructions to Build from source on GitHub--
 	
 	* The "mbsuite/ext-lib" dir contains external jars which are required to run the messaging API specific test.
 	
+--> Hornetq -	
+	
 	* Download "hornetq-2.3.0.Final-bin.tar.gz" from download link provided in "setup-info/prerequisite.txt".
 	
 	* After download create the hornetq broker setup directory & copy the "hornetq-2.3.0.Final-bin.tar.gz" into it.
@@ -96,6 +98,7 @@ Instructions to Build from source on GitHub--
 		
 	* For more information on hornetq refer the " User manual for hornetq.pdf " in "es-perftest/setup-info"
 	
+--> Redis -
 
 	* Download "redis-2.6.16.tar.gz" from download link provided in "setup-info/prerequisite.txt".
 	
@@ -113,5 +116,18 @@ Instructions to Build from source on GitHub--
 	  "/root/redis-setup/redis-2.6.16/ directory"
 		
 	* For more information on redis refer the " User manual for redis.pdf " in "es-perftest/setup-info"
+	
+--> OpenSpliceDDS -
+	
+	* Download OpenspliceDDS from "http://www.prismtech.com/download-documents/1374"
+	  it then downloads the "OpenSpliceDDSV6.3.130716OSS-HDE-x86_64.linux-gcc4.1.2-glibc2.5.tar.gz" file.
+	  
+	* After download create the ospl setup directory & copy the "OpenSpliceDDSV6.3.130716OSS-HDE-x86_64.linux-gcc4.1.2-glibc2.5.tar.gz" into it.
+		e.g
+			cd /opt
+		- Then copy "OpenSpliceDDSV6.3.130716OSS-HDE-x86_64.linux-gcc4.1.2-glibc2.5.tar.gz" into /opt	
+			cp -avr OpenSpliceDDSV6.3.130716OSS-HDE-x86_64.linux-gcc4.1.2-glibc2.5.tar.gz  /opt/
+		- Extarct the file
+			tar -zxvf  OpenSpliceDDSV6.3.130716OSS-HDE-x86_64.linux-gcc4.1.2-glibc2.5.tar.gz
 
 
