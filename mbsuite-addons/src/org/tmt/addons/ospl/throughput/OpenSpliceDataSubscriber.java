@@ -37,7 +37,7 @@ public class OpenSpliceDataSubscriber extends SubscriberBase {
 
 	
 	/**
-	 * Initialize the ospl parameters for Subscriberr.
+	 * Initialize the ospl parameters for Subscriber.
 	 */
 
 	@Override

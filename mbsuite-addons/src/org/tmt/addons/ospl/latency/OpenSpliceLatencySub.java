@@ -41,7 +41,7 @@ public class OpenSpliceLatencySub extends SubscriberBase{
 
 	
 	/**
-	 * Initialize the ospl parameters for Subscriberr.
+	 * Initialize the ospl parameters for Subscriber.
 	 */
 	
 	@Override
