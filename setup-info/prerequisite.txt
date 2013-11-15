@@ -58,7 +58,7 @@ prerequisite for running the test---
    --------------------
    // downloaded and installed from  "http://linux.web.cern.ch/linux/mrg/"
 
-* OpenSpliceDDS 
+* OpenSpliceDDS V6.3.1  x86_64.linux2.6 Community Edition
    ---------------------
    // downloaded and installed from "http://www.prismtech.com/download-documents/1374"
 
