@@ -82,15 +82,33 @@ public class DDSEntityManager {
 	}
 
 	public void createTopic(String topicName) {
+//		int status = -1;
+//		participant.get_default_topic_qos(topicQos);
+//		topicQos.value.reliability.kind = ReliabilityQosPolicyKind.RELIABLE_RELIABILITY_QOS;
+//		topicQos.value.durability.kind = DurabilityQosPolicyKind.VOLATILE_DURABILITY_QOS;
+////		topicQos.value.resource_limits.max_instances = 10000;
+////		topicQos.value.resource_limits.max_samples = 10000;
+////		topicQos.value.resource_limits.max_samples_per_instance = 10000;
+//		topicQos.value.history.kind = HistoryQosPolicyKind.KEEP_ALL_HISTORY_QOS;
+//		topicQos.value.history.depth = -1;
+		
+		
+		
+		
+		
+		
 		int status = -1;
 		participant.get_default_topic_qos(topicQos);
 		topicQos.value.reliability.kind = ReliabilityQosPolicyKind.RELIABLE_RELIABILITY_QOS;
-		topicQos.value.durability.kind = DurabilityQosPolicyKind.VOLATILE_DURABILITY_QOS;
+		topicQos.value.durability.kind = DurabilityQosPolicyKind.TRANSIENT_DURABILITY_QOS;
 //		topicQos.value.resource_limits.max_instances = 10000;
 //		topicQos.value.resource_limits.max_samples = 10000;
 //		topicQos.value.resource_limits.max_samples_per_instance = 10000;
 		topicQos.value.history.kind = HistoryQosPolicyKind.KEEP_ALL_HISTORY_QOS;
-		topicQos.value.history.depth = -1;
+		topicQos.value.history.depth = 10;
+		
+		
+		
 
 		status = participant.set_default_topic_qos(topicQos.value);
 		ErrorHandler.checkStatus(status,
