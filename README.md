@@ -5,6 +5,8 @@ Event Services Performance Tests and Prototyping
 
 
 Instructions to Build from source on GitHub-- 
+	
+	* For Git-checkout ensure that you have proper internet access on your centOS machine.
 
 	* Extract "mbsuite-packager.zip" it creates "mbsuite-packager" dir.
 	
@@ -16,8 +18,16 @@ Instructions to Build from source on GitHub--
 			
 			--> If you have "mbsuite-packager.zip" & you want to checkout code from GitHub & then build the code then  run " ./checkout-build.sh "
 
-			--> If you have already cloned from GitHub using some external method or you downloaded the GitHub repository as a zip (es-perftest-master.zip) & you want to only build the source code without checking out then 
-				 run  " ./build.sh " 	
+			--> If you facing problem with git-chechout using mbsuite-packager  then just go to "https://github.com/tmtsoftware/es-perftest" and choose option "Download ZIP". 
+				 --> It will download the entire git directory into zip file.
+				 --> So you downloaded the GitHub repository as a zip (es-perftest-master.zip) & you want to only build the source code without checking out  
+					 then go to mbsuite-packager/config/parameter.properties & value of " checkout_dir " will be path of unzipped folder "es-perftest-master"
+					 i.e if you unzipped "es-perftest-master.zip" into /root/git-checkout/source  then value to "checkout_dir" will be 
+					 checkout_dir=/root/git-checkout/source/es-perftest-master   &   "test_dir" is dir path where you want the mbsuite test dir 
+					 i.e test_dir=/root/git-checkout
+					 then go to mbsuite-packager/bin & 
+					 
+					 run  " ./build.sh " 	
 			
 	* Ensure that during the build there no errors. After the build complete a "mbsuite" directory gets created under the path specified for parameter "test_dir" . From hereon this mbsuite dir is 
 	  the base dir for benchmarking framework and scripts.
