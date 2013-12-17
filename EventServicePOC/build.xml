@@ -3,21 +3,21 @@
 <project name="TMTEventServiceBuild" default="build">
 	
 <target name="jar.copy">
-    <copy todir="TMTEventServiceWeb/WebContent/WEB-INF/lib">
-        <fileset dir="TMTEventService/build/jar"/>
+    <copy todir="TMTEventServiceWebPOC/WebContent/WEB-INF/lib">
+        <fileset dir="TMTEventServicePOC/build/jar"/>
     </copy>
 </target>
 
 <target name="build">
-	<ant antfile="TMTEventService/build.xml" target="jar" inheritAll="false" ></ant> 
+	<ant antfile="TMTEventServicePOC/build.xml" target="jar" inheritAll="false" ></ant> 
 	<antcall target="jar.copy"/>	
-	<ant antfile="TMTEventServiceWeb/build.xml" target="war" inheritAll="false" ></ant> 
+	<ant antfile="TMTEventServiceWebPOC/build.xml" target="war" inheritAll="false" ></ant> 
 </target>
 
 	
 <target name="clean">
-	<ant antfile="TMTEventService/build.xml" target="clean" inheritAll="false" ></ant> 
-	<ant antfile="TMTEventServiceWeb/build.xml" target="clean" inheritAll="false" ></ant> 
+	<ant antfile="TMTEventServicePOC/build.xml" target="clean" inheritAll="false" ></ant> 
+	<ant antfile="TMTEventServiceWebPOC/build.xml" target="clean" inheritAll="false" ></ant> 
 </target>
 	
 </project>

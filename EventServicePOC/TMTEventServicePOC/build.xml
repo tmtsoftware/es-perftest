@@ -11,6 +11,6 @@
 
 	<target name="jar" depends="compile">
 		<mkdir dir="build/jar" />
-			<jar destfile="build/jar/TMTEventService.jar" basedir="build/classes"></jar>		
+			<jar destfile="build/jar/TMTEventServicePOC.jar" basedir="build/classes"></jar>		
 	</target>
 </project>
