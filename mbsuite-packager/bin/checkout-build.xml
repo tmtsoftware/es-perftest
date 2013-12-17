@@ -1,0 +1,55 @@
+<project name="svn-letu" basedir="." default="checkout">
+
+	<!--  all properties are in build.properties -->
+	<property file="../config/parameter.properties" />
+
+	<!-- path to the svnant libraries. Usually they will be located in ANT_HOME/lib -->
+	<path id="svn.classpath">
+		<fileset dir="../lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- load the svn task -->
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svn.classpath" />
+
+
+	<property name="checkoutDest" value="${checkout_dir}" />
+
+	<target name="clean">
+		<delete dir="${checkoutDest}/mbsuite-addons/bin" />
+		<delete dir="${checkoutDest}/mbsuite-addons/build/dist" />
+		<delete dir="${checkoutDest}/mbsuite-publisher-base/bin" />
+		<delete dir="${checkoutDest}/mbsuite-publisher-base/build/dist" />		
+		<delete dir="${checkoutDest}/mbsuite-subscriber-base/bin" />
+		<delete dir="${checkoutDest}/mbsuite-subscriber-base/build/dist" />
+		<delete dir="${checkoutDest}/mbsuite-utilities/bin" />
+		<delete dir="${checkoutDest}/mbsuite-utilities/build/dist" />
+	<tstamp>
+    		<format property="TIMESTAMP" pattern="yyyy-MM-dd HH:mm:ss" />
+    	</tstamp>
+
+
+	</target>
+
+
+	<property name="svn-user" value="${svn_user}" />
+	<property name="svn-password" value="${svn_password}" />
+	<property name="svn-url" value="${project_svn_url}" />
+
+	<target name="checkout" depends="clean">
+	<property name="version.num" value="1.0.0"/>
+        <buildnumber file="build.num"/>
+        <manifest file="MANIFEST.MF">
+           <attribute name="Built-By" value="${user.name}" />
+           <attribute name="Built-Date" value="${TIMESTAMP}" />		    	      	        
+           <attribute name="Implementation-Vendor" value="Persistent System Ltd." />
+           <attribute name="Implementation-Version" value="${version.num} (b${build.number})"/>	    	
+        </manifest>
+
+	<svn svnkit="true" username="${svn-user}" password="${svn-password}">
+			<checkout url="${svn-url}" depth="infinity" force="false" revision="HEAD" destPath="${checkoutDest}" />
+		</svn>
+	</target>
+
+</project>

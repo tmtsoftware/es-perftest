@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="TMTEventServiceBuild" default="build">
+	
+<target name="jar.copy">
+    <copy todir="TMTEventServiceWeb/WebContent/WEB-INF/lib">
+        <fileset dir="TMTEventService/build/jar"/>
+    </copy>
+</target>
+
+<target name="build">
+	<ant antfile="TMTEventService/build.xml" target="jar" inheritAll="false" ></ant> 
+	<antcall target="jar.copy"/>	
+	<ant antfile="TMTEventServiceWeb/build.xml" target="war" inheritAll="false" ></ant> 
+</target>
+
+	
+<target name="clean">
+	<ant antfile="TMTEventService/build.xml" target="clean" inheritAll="false" ></ant> 
+	<ant antfile="TMTEventServiceWeb/build.xml" target="clean" inheritAll="false" ></ant> 
+</target>
+	
+</project>
