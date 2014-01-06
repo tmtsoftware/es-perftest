@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="TMTEventServicePrototype" default="zip">
+
+	<path id="compile.classpath">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<delete dir="build" />
+		<delete dir="TMTEventServicePrototype" />
+		<delete dir="junit" />
+		<delete dir="javadoc" />
+	</target>
+
+	<target name="compile" depends="clean">
+		<mkdir dir="build/classes" />
+		<javac srcdir="src" destdir="build/classes" >
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+
+	<target name="compile.junit" depends="compile">
+		<javac srcdir="test" destdir="build/classes" >
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+	
+	
+	<target name="jar" depends="compile">
+		<jar destfile="lib/TMTEventServicePrototype.jar" basedir="build/classes">
+		<!--
+			<fileset dir="src">
+				<include name="config/*.properties"/>
+			</fileset>
+			-->
+		</jar>
+		<!--<delete dir="build/classes " />
+		<delete dir="bin" />-->
+	</target>
+	<target name="package">
+		<mkdir dir="TMTEventServicePrototype"/>
+
+		<copy todir="TMTEventServicePrototype">
+			<fileset dir=".">
+				<include name ="*.sh"/>
+				<include name ="*.bat"/>
+			</fileset>
+		</copy>
+		<copy todir="TMTEventServicePrototype/lib">
+			<fileset dir="lib"/>
+			<!--<fileset dir="src/config"/>-->
+		</copy>
+		<copy todir="TMTEventServicePrototype/config">
+			<fileset dir="src/config"/>
+		</copy>
+  </target>
+
+	
+	<target name="zip" depends="jar,package">
+		<zip destfile="../TMTEventServicePrototype.zip" basedir="TMTEventServicePrototype" excludes="dont*.*" />
+	</target>
+
+	<property name="junit.output.dir" value="junit"/>	
+	
+    <path id="JUnit 4.libraryclasspath">
+	   	 <pathelement location="lib/junit-4.7.jar"/>
+    </path>
+    <path id="EventServicePrototype.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="lib/hornetq-commons.jar"/>
+        <pathelement location="lib/hornetq-core-client.jar"/>
+        <pathelement location="lib/jnp-client.jar"/>
+        <pathelement location="lib/netty.jar"/>
+    </path>
+
+    <target name="junit" depends="compile.junit">
+        <mkdir dir="${junit.output.dir}"/>
+		<copy todir="build/classes/config">
+			<fileset dir="src/config"/>
+		</copy>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="org.tmt.csw.testsuite.TestSuiteMain" todir="${junit.output.dir}"/>
+            <classpath refid="EventServicePrototype.classpath"/>
+        </junit>
+    	<delete dir="build/classes/config" />
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+
+	<target name="report">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+	
+	<target name="doc" description="generate documentation">
+		<mkdir dir="javadoc" />
+		<javadoc sourcepath="src" destdir="javadoc"/>
+	 </target>
+	
+	
+</project>
