@@ -1,3 +1,4 @@
+
 #!/bin/sh
 #-Xms8192M -Xmx22528M  for high performance
 #export HORNETQ_HOME=..

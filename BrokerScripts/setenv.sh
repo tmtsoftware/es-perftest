@@ -1,3 +1,4 @@
+
 #please update HORNETQ_HOME variable as per HornetQ installation directory path on your machine, below mentioned is an example
 HORNETQ_HOME=/root/TMT-phase-3/hornetq-setup/hornetq-2.3.0.Final
 
